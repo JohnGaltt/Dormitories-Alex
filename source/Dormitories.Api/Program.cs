@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Dormitories_Alex
+namespace Dormitories.Api
 {
     public class Program
     {
