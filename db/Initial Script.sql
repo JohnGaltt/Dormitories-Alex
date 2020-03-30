@@ -30,9 +30,13 @@ INSERT INTO Dormitories VALUES(
 INSERT INTO Dormitories VALUES(
 'Гуртожиток 3', 'Лукаша 3')
 
-INSERT INTO Rooms VALUES
-(1, '15', 1),
-(2, '16', 2)
+Select * FROM Dormitories
+Select * FROM Rooms
+Select * FROM Students
 
-INSERT INTO Students VALUES('Василь', 'vasyl@gmail.com', 3, 1)
-INSERT INTO Students VALUES('Петро', 'petro@gmail.com', 3, 1)
+INSERT INTO Rooms VALUES
+('512', 5, 1);	
+
+
+INSERT INTO Students VALUES('Василь', 'vasyl@gmail.com', 1, 2)
+INSERT INTO Students VALUES('Петро', 'petro@gmail.com', 1)

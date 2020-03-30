@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Generic;
 
 namespace Dormitories.Core.DataAccess
 {
@@ -11,7 +12,7 @@ namespace Dormitories.Core.DataAccess
         public static void Build(ModelBuilder modelBuilder)
         {
             EntityTypeBuilder<Dormitory> entityTypeBuilder = modelBuilder.Entity<Dormitory>();
-            entityTypeBuilder.ToTable("Dormitory");
+            entityTypeBuilder.ToTable("Dormitories");
             entityTypeBuilder.HasKey(x => x.Id);
             entityTypeBuilder.Property(x => x.Name).IsRequired().HasMaxLength(64);
             entityTypeBuilder.Property(x => x.Address).IsRequired().HasMaxLength(64);

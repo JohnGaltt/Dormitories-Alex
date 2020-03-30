@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Dormitories.Core.BusinessLogic.Managers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Dormitories.Api.Controllers
 {
@@ -8,7 +10,12 @@ namespace Dormitories.Api.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : ControllerBase
     {
+        private readonly IStudentManager _studentManager;
+        public HomeController(IStudentManager studentManager)
+        {
+            _studentManager = studentManager;
+        }
         [HttpGet]
-        public IActionResult Get() => Ok("Dormitory works");
+        public async Task<IActionResult> Get() => Ok(await _studentManager.Get());
     }
 }

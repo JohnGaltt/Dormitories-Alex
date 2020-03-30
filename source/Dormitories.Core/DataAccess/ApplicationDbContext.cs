@@ -33,9 +33,18 @@ namespace Dormitories.Core.DataAccess
             _databaseOptions = databaseOptions.Value;
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            Student.Build(modelBuilder);
+            Room.Build(modelBuilder);
+            Dormitory.Build(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_databaseOptions.ConnectionString);
+            
         }
     }
 }

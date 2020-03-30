@@ -1,5 +1,7 @@
-﻿using Dormitories.Core.DataAccess.Settings;
+﻿using Dormitories.Core.BusinessLogic.Managers;
+using Dormitories.Core.DataAccess.Settings;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
@@ -20,9 +22,19 @@ namespace Dormitories.Core.DataAccess
 
             services
                 .AddSingleton(Options.Create(databaseSettings))
+                .AddEntityFrameworkSqlServer()
                 .AddDbContext<TContext>(serviceLifetime);
 
             return services;
         }
-    }
+        public static IServiceCollection AddCoreIntegrations(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddApplicationDbContext<ApplicationDbContext>(configuration.GetSection("Database").Get<DatabaseSettings>());
+            services.AddTransient<IStudentManager, StudentManager>();
+            services.AddTransient<IRoomManager, RoomManager>();
+            services.AddTransient<IDormitoryManager, DormitoryManager>();
+
+            return services;
+        }
+   }
 }
