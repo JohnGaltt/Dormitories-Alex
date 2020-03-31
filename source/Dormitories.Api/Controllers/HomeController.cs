@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Dormitories.Api.Controllers
 {
-    [Route("")]
+    [Route("home")]
     [AllowAnonymous]
     [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : ControllerBase
@@ -15,6 +15,7 @@ namespace Dormitories.Api.Controllers
         {
             _studentManager = studentManager;
         }
+
         [HttpGet]
         public async Task<IActionResult> Get() => Ok(await _studentManager.Get());
     }

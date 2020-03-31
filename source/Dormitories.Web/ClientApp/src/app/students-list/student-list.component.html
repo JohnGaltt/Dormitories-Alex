@@ -1,0 +1,32 @@
+<h1 id="tableLabel">Manage Active Students</h1>
+
+<p *ngIf="!students"><em>Loading...</em></p>
+
+<nav class="navbar navbar-light bg-light justify-content-between">
+  <a class="navbar-brand">Students</a>
+  <form class="form-inline">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  </form>
+</nav>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="students">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Dormitory Name</th>
+      <th>Dormitory Address</th>
+      <th>Room Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let student of students">
+      <td>{{ student.name }}</td>
+      <td>{{ student.email }}</td>
+      <td>{{ student.dormitory.name }}</td>
+      <td>{{ student.dormitory.address }}</td>
+      <td>{{ student.room.name }}</td>
+    </tr>
+  </tbody>
+</table>

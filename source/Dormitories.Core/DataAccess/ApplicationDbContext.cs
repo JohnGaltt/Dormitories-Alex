@@ -41,6 +41,7 @@ namespace Dormitories.Core.DataAccess
             base.OnModelCreating(modelBuilder);
         }
 
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_databaseOptions.ConnectionString);

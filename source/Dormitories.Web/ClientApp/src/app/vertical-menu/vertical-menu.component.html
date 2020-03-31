@@ -1,0 +1,43 @@
+<!-- Sidebar  -->
+<div class="wrapper">
+  <nav id="sidebar">
+    <ul class="list-unstyled components">
+      <li>
+        <a
+          [routerLink]="['/counter']"
+          data-toggle="collapse"
+          aria-expanded="false"
+          class="dropdown-toggle"
+          ><i class="fa fa-home fa-lg"></i> Home</a
+        >
+        <ul class="collapse list-unstyled" id="homeSubmenu">
+          <li>
+            <a href="#">Home 1</a>
+          </li>
+          <li>
+            <a href="#">Home 2</a>
+          </li>
+          <li>
+            <a href="#">Home 3</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a [routerLink]="['/student-list']"
+          ><i class="fa fa-users fa-lg"></i>Users</a
+        >
+      </li>
+      <li>
+        <a href="#"
+          ><i class="fa fa-building-o fa-lg" aria-hidden="true"></i
+          >Dormitories</a
+        >
+      </li>
+      <li>
+        <a href="#"
+          ><i class="fa fa-map-marker fa-lg" aria-hidden="true"></i>Rooms</a
+        >
+      </li>
+    </ul>
+  </nav>
+</div>
