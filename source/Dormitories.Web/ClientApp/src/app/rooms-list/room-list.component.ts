@@ -2,23 +2,23 @@ import { Component, Inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
 @Component({
-  selector: "app-student-list",
-  templateUrl: "./student-list.component.html"
+  selector: "room-list",
+  templateUrl: "./room-list.component.html"
 })
-export class StudentListComponent {
-  public students: Students[];
+export class RoomListComponent {
+  public rooms: Room[];
 
   constructor(http: HttpClient) {
-    http.get<Students[]>("https://localhost:44372/students").subscribe(
+    http.get<Room[]>("https://localhost:44372/rooms").subscribe(
       result => {
-        this.students = result;
+        this.rooms = result;
       },
       error => console.error(error)
     );
   }
 }
 
-interface Students {
+interface Room {
   id: string;
   name: string;
   email: string;

@@ -1,4 +1,5 @@
 ﻿using Dormitories.Core.DataAccess;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -23,9 +24,9 @@ namespace Dormitories.Core.BusinessLogic.Managers
             throw new System.NotImplementedException();
         }
 
-        public Task<List<Room>> Get()
+        public async Task<List<Room>> Get()
         {
-            throw new System.NotImplementedException();
+            return await _dbContext.Rooms.Include(x => x.Dormitory).ToListAsync();
         }
 
         public Task<Room> GetById(int id)

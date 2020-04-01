@@ -5,13 +5,11 @@ using System.Threading.Tasks;
 
 namespace Dormitories.Api.Controllers
 {
-    [Route("home")]
-    [AllowAnonymous]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public class HomeController : ControllerBase
+    [Route("students")]
+    public class StudentsController : ControllerBase
     {
         private readonly IStudentManager _studentManager;
-        public HomeController(IStudentManager studentManager)
+        public StudentsController(IStudentManager studentManager)
         {
             _studentManager = studentManager;
         }

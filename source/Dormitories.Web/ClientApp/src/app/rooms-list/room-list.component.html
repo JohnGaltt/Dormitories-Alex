@@ -1,15 +1,15 @@
-<h1 id="tableLabel">Manage Active Students</h1>
+<h1 id="tableLabel">Manage Active Rooms</h1>
 
-<p *ngIf="!students"><em>Loading...</em></p>
+<p *ngIf="!rooms"><em>Loading...</em></p>
 
 <nav class="navbar navbar-light bg-light justify-content-between">
   <div>
     <button class="btn btn-outline-secondary mr-sm-2">
-      <i class="fa fa-user-plus" aria-hidden="true"></i> Add Student
+      <i class="fa fa-map-marker fa-lg" aria-hidden="true"></i> Add Room
     </button>
     <button class="btn btn-outline-secondary">
-      <i class="fa fa-users fa-lg"></i>
-      Add Multiple Students
+      <i class="fa fa-map-marker fa-lg" aria-hidden="true"></i> Add Multiple
+      Rooms
     </button>
   </div>
   <form class="form-inline">
@@ -25,29 +25,23 @@
   </form>
 </nav>
 
-<table
-  class="table table-striped"
-  aria-labelledby="tableLabel"
-  *ngIf="students"
->
+<table class="table table-striped" aria-labelledby="tableLabel" *ngIf="rooms">
   <thead>
     <tr>
       <th>Name</th>
-      <th>Email</th>
+      <th>Floor</th>
       <th></th>
       <th>Dormitory Name</th>
       <th>Dormitory Address</th>
-      <th>Room Name</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let student of students">
-      <td>{{ student.name }}</td>
-      <td>{{ student.email }}</td>
+    <tr *ngFor="let room of rooms">
+      <td>{{ room.name }}</td>
+      <td>{{ room.floor }}</td>
       <td><i class="fa fa-ellipsis-v fa-sm" aria-hidden="true"></i></td>
-      <td>{{ student.dormitory.name }}</td>
-      <td>{{ student.dormitory.address }}</td>
-      <td>{{ student.room.name }}</td>
+      <td>{{ room.dormitory.name }}</td>
+      <td>{{ room.dormitory.address }}</td>
     </tr>
   </tbody>
 </table>

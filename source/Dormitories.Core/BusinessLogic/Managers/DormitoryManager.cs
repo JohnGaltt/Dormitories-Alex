@@ -1,4 +1,6 @@
 ﻿using Dormitories.Core.DataAccess;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,9 +15,18 @@ namespace Dormitories.Core.BusinessLogic.Managers
             _dbContext = dbContext;
         }
 
-        public Task<Dormitory> Create(Dormitory student)
+        public async Task<Dormitory> Create(Dormitory newDormitory)
         {
-            throw new System.NotImplementedException();
+            var oldDormitory = await GetByName(newDormitory.Name);
+            if(oldDormitory != null)
+            {
+                //Conflict
+                throw new NotImplementedException();
+            }
+            await _dbContext.AddAsync(newDormitory);
+            await _dbContext.SaveChangesAsync();
+
+            return newDormitory;
         }
 
         public Task Delete(int id)
@@ -23,14 +34,19 @@ namespace Dormitories.Core.BusinessLogic.Managers
             throw new System.NotImplementedException();
         }
 
-        public Task<List<Dormitory>> Get()
+        public async Task<List<Dormitory>> Get()
         {
-            throw new System.NotImplementedException();
+            return await _dbContext.Dormitories.ToListAsync();
         }
 
-        public Task<Dormitory> GetById(int id)
+        public async Task<Dormitory> GetById(int id)
         {
-            throw new System.NotImplementedException();
+            return await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Dormitory> GetByName(string name)
+        {
+            return await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Name == name);
         }
 
         public Task<Dormitory> Update(Dormitory newStudent)
