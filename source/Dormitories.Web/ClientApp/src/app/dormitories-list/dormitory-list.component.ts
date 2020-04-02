@@ -1,50 +1,97 @@
-import { Component, Inject } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Dormitory } from "../models/dormitory-models";
+import { DormitoryService } from "../services/dormitory-service";
+import { NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "dormitory-list",
   templateUrl: "./dormitory-list.component.html"
 })
-export class DormitoryListComponent {
+export class DormitoryListComponent implements OnInit {
+  page = 1;
+  pageSize = 10;
+  public filteredDormitories: Dormitory[];
   public dormitories: Dormitory[];
-  public dormitry: any;
+  public dormitory: Dormitory = {
+    address: "",
+    name: "",
+    id: 0
+  };
+  public errorMessage: any;
+  public name: string;
+  public address: string;
+  private _searchListFilter: string;
+  get searchListFilter(): string {
+    return this._searchListFilter;
+  }
+  set searchListFilter(value: string) {
+    this._searchListFilter = value;
+    this.filteredDormitories =
+      this.searchListFilter != ""
+        ? this.performSearch(this.searchListFilter)
+        : this.dormitories;
+  }
 
-  constructor(private http: HttpClient, private modalService: NgbModal) {
-    http.get<Dormitory[]>("https://localhost:44372/dormitories").subscribe(
+  constructor(
+    private http: HttpClient,
+    private modalService: NgbModal,
+    private dormitoryService: DormitoryService,
+    private router: Router
+  ) {}
+
+  OnClick() {
+    debugger;
+    this.dormitoryService.createDormitory(this.dormitory).subscribe(
       result => {
-        this.dormitories = result;
+        console.log(result);
+        this.dormitories.push(result);
+        this.modalService.dismissAll();
       },
       error => console.error(error)
     );
   }
-  OnClick() {
-    this.dormitry = { address: "address", name: "name" };
-    
-    this.http
-      .post("https://localhost:44372/dormitories/create", this.dormitry)
-      .subscribe(
-        result => {
-          console.log(result);
-        },
-        error => console.error(error)
-      );
-  }
 
-  onSubmit() {
+  onSubmit(form: NgForm) {
     console.log("Form was submitted!");
   }
 
+  performSearch(value: string) {
+    value = value.toLocaleLowerCase();
+    return this.dormitories.filter(
+      (dormitry: Dormitory) =>
+        dormitry.name.toLocaleLowerCase().indexOf(value) !== -1
+    );
+  }
+  delete(): void {
+    debugger;
+    this.dormitoryService.deleteDormitory(this.dormitory.id).subscribe(
+      result => {
+        console.log(result);
+        this.router.navigate(["/dormitory-list"]);
+      },
+      error => console.error(error)
+    );
+  }
   open(content) {
+    this.address = "";
+    this.name = "";
     this.modalService
       .open(content, { ariaLabelledBy: "modal-basic-title" })
       .result.then(result => {
         console.log("success");
       });
   }
-}
 
-interface Dormitory {
-  name: string;
-  address: string;
+  ngOnInit(): void {
+    this.dormitoryService.getDormitories().subscribe({
+      next: result => {
+        this.dormitories = result;
+        this.filteredDormitories = this.dormitories;
+      },
+      error: err => (this.errorMessage = err)
+    });
+  }
 }

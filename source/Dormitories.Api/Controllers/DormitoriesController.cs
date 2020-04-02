@@ -19,10 +19,17 @@ namespace Dormitories.Api.Controllers
 
         [Route("create")]
         [HttpPost]
-        public async Task<IActionResult> Create(Dormitory dormitory)
+        public async Task<IActionResult> Create([FromBody]Dormitory dormitory)
         {
             var dormitorynew = await _dormitoryManager.Create(dormitory);
             return Ok(dormitory);
          }
+
+        [HttpDelete("id")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _dormitoryManager.Delete(id);
+            return Ok();
+        }
     }
 }
