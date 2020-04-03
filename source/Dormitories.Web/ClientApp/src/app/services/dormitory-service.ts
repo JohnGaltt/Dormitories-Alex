@@ -2,14 +2,14 @@ import { Injectable } from "@angular/core";
 import {
   HttpClient,
   HttpErrorResponse,
-  HttpHeaders
+  HttpHeaders,
 } from "@angular/common/http";
 
-import { Dormitory } from "../models/dormitory-models";
+import { Dormitory } from "../models/dormitory";
 import { Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class DormitoryService {
   constructor(private http: HttpClient) {}
@@ -17,16 +17,17 @@ export class DormitoryService {
     return this.http
       .get<Dormitory[]>("https://localhost:44372/dormitories")
       .pipe(
-        tap(data => console.log("All: " + JSON.stringify(data))),
+        tap((data) => console.log("All: " + JSON.stringify(data))),
         catchError(this.handleError)
       );
   }
 
-  getDormitory(id: string): Observable<Dormitory> {
+  getDormitory(id: number): Observable<Dormitory> {
+    debugger;
     return this.http
       .get<Dormitory>(`https://localhost:44372/dormitories/${id}`)
       .pipe(
-        tap(data => console.log("All: " + JSON.stringify(data))),
+        tap((data) => console.log("All: " + JSON.stringify(data))),
         catchError(this.handleError)
       );
   }
@@ -35,7 +36,7 @@ export class DormitoryService {
     return this.http
       .post<Dormitory>("https://localhost:44372/dormitories/create", dormitory)
       .pipe(
-        tap(data => console.log("All: " + JSON.stringify(data))),
+        tap((data) => console.log("All: " + JSON.stringify(data))),
         catchError(this.handleError)
       );
   }
@@ -43,11 +44,15 @@ export class DormitoryService {
   updateDormitory(dormitory: Dormitory): Observable<Dormitory> {
     const headers = new HttpHeaders({ "Content-Type": "application/json" });
     return this.http
-      .put<Dormitory>("https://localhost:44372/dormitories/create", dormitory, {
-        headers: headers
-      })
+      .put<Dormitory>(
+        `https://localhost:44372/dormitories/${dormitory.id}`,
+        dormitory,
+        {
+          headers: headers,
+        }
+      )
       .pipe(
-        tap(data => console.log("All: " + JSON.stringify(data))),
+        tap((data) => console.log("All: " + JSON.stringify(data))),
         catchError(this.handleError)
       );
   }
@@ -56,7 +61,7 @@ export class DormitoryService {
     return this.http
       .delete<{}>(`https://localhost:44372/dormitories/${id}`)
       .pipe(
-        tap(data => console.log("All: " + JSON.stringify(data))),
+        tap((data) => console.log("All: " + JSON.stringify(data))),
         catchError(this.handleError)
       );
   }

@@ -1,15 +1,15 @@
-<h1 id="tableLabel">Manage Active Dormitories</h1>
+<h1 id="tableLabel">Manage Active Students</h1>
 
-<p *ngIf="!dormitories"><em>Loading...</em></p>
+<p *ngIf="!students"><em>Loading...</em></p>
 
 <nav class="navbar navbar-light bg-light justify-content-between">
   <div>
     <button class="btn btn-outline-secondary mr-sm-2" (click)="open(mymodal)">
-      <i class="fa fa-building-o fa-lg" aria-hidden="true"></i> Add Dormitory
+      <i class="fa fa-user-plus" aria-hidden="true"></i> Add Student
     </button>
     <button class="btn btn-outline-secondary">
-      <i class="fa fa-building-o fa-lg" aria-hidden="true"></i> Add Multiple
-      Dormitories
+      <i class="fa fa-users fa-lg"></i>
+      Add Multiple Students
     </button>
   </div>
   <form class="form-inline">
@@ -18,8 +18,6 @@
       type="search"
       placeholder="Search"
       aria-label="Search"
-      [(ngModel)]="searchListFilter"
-      name="search"
     />
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
       Search
@@ -30,48 +28,30 @@
 <table
   class="table table-striped"
   aria-labelledby="tableLabel"
-  *ngIf="filteredDormitories"
+  *ngIf="students"
 >
   <thead>
     <tr>
       <th>Name</th>
+      <th>Email</th>
       <th></th>
-      <th>Address</th>
+      <th>Dormitory Name</th>
+      <th>Dormitory Address</th>
+      <th>Room Name</th>
     </tr>
   </thead>
   <tbody>
-    <tr
-      *ngFor="
-        let dormitory of filteredDormitories
-          | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
-      "
-    >
-      <td>{{ dormitory.name }}</td>
-      <td>
-        <i
-          [ngbPopover]="popContent"
-          class="fa fa-ellipsis-v fa-sm"
-          aria-hidden="true"
-        ></i>
-      </td>
-      <td>{{ dormitory.address }}</td>
+    <tr *ngFor="let student of students">
+      <td>{{ student.name }}</td>
+      <td>{{ student.email }}</td>
+      <td><i class="fa fa-ellipsis-v fa-sm" aria-hidden="true"></i></td>
+      <td>{{ student.dormitory.name }}</td>
+      <td>{{ student.dormitory.address }}</td>
+      <td>{{ student.room.name }}</td>
     </tr>
   </tbody>
-  <ngb-pagination
-    [collectionSize]="filteredDormitories.length"
-    [(page)]="page"
-    [maxSize]="5"
-  ></ngb-pagination>
 </table>
 
-<ng-template #popContent>
-  <button (click)="onSubmit()" class="btn btn-outline-secondary">
-    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Edit
-  </button>
-  <button (click)="delete()" class="btn btn-outline-dark">
-    <i class="fa fa-trash-o" aria-hidden="true"></i> Remove
-  </button>
-</ng-template>
 <ng-template #mymodal let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Bootstrap Modal</h4>
@@ -95,7 +75,7 @@
             minlength="3"
             class="form-control"
             id="name"
-            [(ngModel)]="dormitory.name"
+            [(ngModel)]="student.name"
             placeholder="Name (required)"
             name="name"
             #nameVar="ngModel"
@@ -105,7 +85,7 @@
           />
           <span class="invalid-feedback">
             <span *ngIf="nameVar.errors?.required"
-              >Please enter name of the dormitory</span
+              >Please enter name of the student</span
             >
             <span *ngIf="nameVar.errors?.minlength"
               >The name must be longer than 3 characters</span
@@ -113,28 +93,57 @@
           </span>
         </div>
         <div class="form-group col-md-6">
-          <label for="address">Address</label>
+          <label for="address">Email</label>
           <input
             required
             minlength="3"
             type="text"
             class="form-control"
-            id="address"
-            [(ngModel)]="dormitory.address"
-            placeholder="Address (required)"
-            name="address"
-            #addressVar="ngModel"
+            id="email"
+            [(ngModel)]="student.email"
+            placeholder="Email (required)"
+            name="email"
+            #emailVar="ngModel"
             [ngClass]="{
               'is-invalid':
-                (addressVar.touched || addressVar.dirty) && !addressVar.valid
+                (emailVar.touched || emailVar.dirty) && !emailVar.valid
             }"
           />
           <span class="invalid-feedback">
-            <span *ngIf="addressVar.errors?.required"
-              >Please enter address of the dormitory</span
+            <span *ngIf="emailVar.errors?.required"
+              >Please enter email of the student</span
             >
-            <span *ngIf="addressVar.errors?.minlength"
+            <span *ngIf="emailVar.errors?.minlength"
               >The address must be longer than 3 characters</span
+            >
+          </span>
+        </div>
+        <div *ngIf="dormitories" class="form-group col-md-6">
+          <select
+            required
+            class="form-control"
+            id="dormitories"
+            name="dormitories"
+            #dormitoriesVar="ngModel"
+            [(ngModel)]="student.dormitory.id"
+            [ngClass]="{
+              'is-invalid':
+                (dormitoriesVar.touched || dormitoriesVar.dirty) &&
+                !dormitoriesVar.valid
+            }"
+            (ngModelChange)="onChange($event)"
+          >
+            <option
+              *ngFor="let dormitory of dormitories"
+              [ngValue]="dormitory.id"
+              [selected]="dormitories[0].id"
+            >
+              {{ dormitory.name }}
+            </option>
+          </select>
+          <span class="invalid-feedback">
+            <span *ngIf="dormitoriesVar.errors?.required"
+              >Please select dormitory</span
             >
           </span>
         </div>

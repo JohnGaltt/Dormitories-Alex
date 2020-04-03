@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace Dormitories.Core.DataAccess
 {
     public class BaseModel
     {
+        [JsonProperty("id")]
         public int Id { get; set; }
     }
 }

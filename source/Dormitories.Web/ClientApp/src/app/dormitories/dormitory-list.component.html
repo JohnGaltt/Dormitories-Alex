@@ -1,0 +1,163 @@
+<h1 id="tableLabel">Manage Active Dormitories</h1>
+
+<p *ngIf="!dormitories"><em>Loading...</em></p>
+
+<nav class="navbar navbar-light bg-light justify-content-between">
+  <div>
+    <button class="btn btn-outline-secondary mr-sm-2" (click)="open(mymodal)">
+      <i class="fa fa-building-o fa-lg" aria-hidden="true"></i> Add Dormitory
+    </button>
+    <button class="btn btn-outline-secondary">
+      <i class="fa fa-building-o fa-lg" aria-hidden="true"></i> Add Multiple
+      Dormitories
+    </button>
+  </div>
+  <form class="form-inline">
+    <input
+      class="form-control mr-sm-2"
+      type="search"
+      placeholder="Search"
+      aria-label="Search"
+      [(ngModel)]="searchListFilter"
+      name="search"
+    />
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+      Search
+    </button>
+  </form>
+</nav>
+
+<table
+  class="table table-striped"
+  aria-labelledby="tableLabel"
+  *ngIf="filteredDormitories"
+>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th></th>
+      <th>Address</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="
+        let dormitory of filteredDormitories
+          | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
+      "
+    >
+      <td>
+        {{ dormitory.name }}
+      </td>
+      <td>
+        <i
+          [ngbPopover]="popContent"
+          class="fa fa-ellipsis-v fa-sm"
+          aria-hidden="true"
+        >
+        </i>
+        <ng-template #popContent>
+          <button
+            [routerLink]="['/dormitory', dormitory.id, 'edit']"
+            class="btn btn-outline-secondary"
+          >
+            Edit
+          </button>
+          <app-delete-button
+            [elementId]="dormitory.id"
+            (removeClicked)="onRemoveElement($event)"
+          ></app-delete-button>
+        </ng-template>
+      </td>
+      <td>{{ dormitory.address }}</td>
+    </tr>
+  </tbody>
+  <ngb-pagination
+    [collectionSize]="filteredDormitories.length"
+    [(page)]="page"
+    [maxSize]="5"
+  ></ngb-pagination>
+</table>
+
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Bootstrap Modal</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form novalidate (ngSubmit)="onSubmit(saveForm)" #saveForm="ngForm">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            required
+            minlength="3"
+            class="form-control"
+            id="name"
+            [(ngModel)]="dormitory.name"
+            placeholder="Name (required)"
+            name="name"
+            #nameVar="ngModel"
+            [ngClass]="{
+              'is-invalid': (nameVar.touched || nameVar.dirty) && !nameVar.valid
+            }"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="nameVar.errors?.required"
+              >Please enter name of the dormitory</span
+            >
+            <span *ngIf="nameVar.errors?.minlength"
+              >The name must be longer than 3 characters</span
+            >
+          </span>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="address">Address</label>
+          <input
+            required
+            minlength="3"
+            type="text"
+            class="form-control"
+            id="address"
+            [(ngModel)]="dormitory.address"
+            placeholder="Address (required)"
+            name="address"
+            #addressVar="ngModel"
+            [ngClass]="{
+              'is-invalid':
+                (addressVar.touched || addressVar.dirty) && !addressVar.valid
+            }"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="addressVar.errors?.required"
+              >Please enter address of the dormitory</span
+            >
+            <span *ngIf="addressVar.errors?.minlength"
+              >The address must be longer than 3 characters</span
+            >
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="OnClick()">
+      Submit
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="modal.close('Save click')"
+    >
+      Exit
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,72 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Edit Modal</h4>
+</div>
+<div *ngIf="dormitory" class="modal-body">
+  <form novalidate (ngSubmit)="onSubmit()" #saveForm="ngForm">
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="name">Name</label>
+        <input
+          type="text"
+          required
+          minlength="3"
+          class="form-control"
+          id="name"
+          [(ngModel)]="dormitory.name"
+          placeholder="Name (required)"
+          name="name"
+          #nameVar="ngModel"
+          [ngClass]="{
+            'is-invalid': (nameVar.touched || nameVar.dirty) && !nameVar.valid
+          }"
+        />
+        <span class="invalid-feedback">
+          <span *ngIf="nameVar.errors?.required"
+            >Please enter name of the dormitory</span
+          >
+          <span *ngIf="nameVar.errors?.minlength"
+            >The name must be longer than 3 characters</span
+          >
+        </span>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="address">Address</label>
+        <input
+          required
+          minlength="3"
+          type="text"
+          class="form-control"
+          id="address"
+          [(ngModel)]="dormitory.address"
+          placeholder="Address (required)"
+          name="address"
+          #addressVar="ngModel"
+          [ngClass]="{
+            'is-invalid':
+              (addressVar.touched || addressVar.dirty) && !addressVar.valid
+          }"
+        />
+        <span class="invalid-feedback">
+          <span *ngIf="addressVar.errors?.required"
+            >Please enter address of the dormitory</span
+          >
+          <span *ngIf="addressVar.errors?.minlength"
+            >The address must be longer than 3 characters</span
+          >
+        </span>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="onSubmit()">
+    Save
+  </button>
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="modal.close('Save click')"
+  >
+    Exit
+  </button>
+</div>

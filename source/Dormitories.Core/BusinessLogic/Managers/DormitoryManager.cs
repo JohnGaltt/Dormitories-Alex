@@ -21,7 +21,7 @@ namespace Dormitories.Core.BusinessLogic.Managers
             if(oldDormitory != null)
             {
                 //Conflict
-                throw new NotImplementedException();
+                throw new InvalidOperationException("Conflict");
             }
             await _dbContext.AddAsync(newDormitory);
             await _dbContext.SaveChangesAsync();
@@ -29,9 +29,12 @@ namespace Dormitories.Core.BusinessLogic.Managers
             return newDormitory;
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new System.NotImplementedException();
+            var dormitory = await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Id == id) 
+                ?? throw new InvalidOperationException("Not Found");
+            _dbContext.Dormitories.Remove(dormitory);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<List<Dormitory>> Get()
@@ -49,9 +52,13 @@ namespace Dormitories.Core.BusinessLogic.Managers
             return await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Name == name);
         }
 
-        public Task<Dormitory> Update(Dormitory newStudent)
+        public async Task<Dormitory> Update(Dormitory updatedDormitory)
         {
-            throw new System.NotImplementedException();
+            var existingDormitory = await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Id == updatedDormitory.Id) ?? throw new NotImplementedException();
+            existingDormitory.Name = updatedDormitory.Name;
+            existingDormitory.Address = updatedDormitory.Address;
+            await _dbContext.SaveChangesAsync();
+            return existingDormitory;
         }
     }
 }

@@ -1,14 +1,14 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Dormitory } from "../models/dormitory-models";
+import { Dormitory } from "../models/dormitory";
 import { DormitoryService } from "../services/dormitory-service";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
 
 @Component({
   selector: "dormitory-list",
-  templateUrl: "./dormitory-list.component.html"
+  templateUrl: "./dormitory-list.component.html",
 })
 export class DormitoryListComponent implements OnInit {
   page = 1;
@@ -18,7 +18,7 @@ export class DormitoryListComponent implements OnInit {
   public dormitory: Dormitory = {
     address: "",
     name: "",
-    id: 0
+    id: 0,
   };
   public errorMessage: any;
   public name: string;
@@ -45,17 +45,47 @@ export class DormitoryListComponent implements OnInit {
   OnClick() {
     debugger;
     this.dormitoryService.createDormitory(this.dormitory).subscribe(
-      result => {
+      (result) => {
         console.log(result);
         this.dormitories.push(result);
         this.modalService.dismissAll();
       },
-      error => console.error(error)
+      (error) => console.error(error)
     );
   }
 
   onSubmit(form: NgForm) {
     console.log("Form was submitted!");
+  }
+
+  onRemoveElement(elementId: number): void {
+    this.dormitoryService.deleteDormitory(elementId).subscribe(
+      (result) => {
+        this.dormitoryService.getDormitories().subscribe({
+          next: (result) => {
+            this.dormitories = result;
+            this.filteredDormitories = this.dormitories;
+          },
+          error: (err) => (this.errorMessage = err),
+        });
+      },
+      (error) => console.error(error)
+    );
+  }
+
+  onEditElement(dormitory: Dormitory): void {
+    this.dormitoryService.updateDormitory(dormitory).subscribe(
+      (result) => {
+        this.dormitoryService.getDormitories().subscribe({
+          next: (result) => {
+            this.dormitories = result;
+            this.filteredDormitories = this.dormitories;
+          },
+          error: (err) => (this.errorMessage = err),
+        });
+      },
+      (error) => console.error(error)
+    );
   }
 
   performSearch(value: string) {
@@ -68,11 +98,10 @@ export class DormitoryListComponent implements OnInit {
   delete(): void {
     debugger;
     this.dormitoryService.deleteDormitory(this.dormitory.id).subscribe(
-      result => {
-        console.log(result);
+      (result) => {
         this.router.navigate(["/dormitory-list"]);
       },
-      error => console.error(error)
+      (error) => console.error(error)
     );
   }
   open(content) {
@@ -80,18 +109,18 @@ export class DormitoryListComponent implements OnInit {
     this.name = "";
     this.modalService
       .open(content, { ariaLabelledBy: "modal-basic-title" })
-      .result.then(result => {
+      .result.then((result) => {
         console.log("success");
       });
   }
 
   ngOnInit(): void {
     this.dormitoryService.getDormitories().subscribe({
-      next: result => {
+      next: (result) => {
         this.dormitories = result;
         this.filteredDormitories = this.dormitories;
       },
-      error: err => (this.errorMessage = err)
+      error: (err) => (this.errorMessage = err),
     });
   }
 }

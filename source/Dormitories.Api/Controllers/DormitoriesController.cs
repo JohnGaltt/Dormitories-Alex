@@ -25,10 +25,25 @@ namespace Dormitories.Api.Controllers
             return Ok(dormitory);
          }
 
-        [HttpDelete("id")]
+        [Route("{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var dormitory = await _dormitoryManager.GetById(id);
+            return Ok(dormitory);
+        }
+
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _dormitoryManager.Delete(id);
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Edit([FromQuery]int id, [FromBody]Dormitory dormitory)
+        {
+            await _dormitoryManager.Update(dormitory);
             return Ok();
         }
     }
