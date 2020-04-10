@@ -7,47 +7,48 @@ using System.Threading.Tasks;
 
 namespace Dormitories.Core.BusinessLogic.Managers
 {
-    public class StudentManager : IStudentManager 
+    public class UserManager : IUserManager
     {
         private readonly ApplicationDbContext _dbContext;
-        public StudentManager(ApplicationDbContext dbContext)
+        public UserManager(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-        
-        public async Task<Student> Create(Student student)
+
+        public async Task<ApplicationUser> Create(ApplicationUser user)
         {
-            if(await _dbContext.Students.AnyAsync(x => x.Id == student.Id))
+            if (await _dbContext.Users.AnyAsync(x => x.Id == user.Id))
             {
                 throw new NotImplementedException();
             }
-            await _dbContext.AddAsync(student);
+            await _dbContext.AddAsync(user);
             await _dbContext.SaveChangesAsync();
-            return student;
+            return user;
         }
 
-        public async Task<List<Student>> Get()
+        public async Task<List<ApplicationUser>> Get()
         {
-            var students = await _dbContext.Students.Include(x=>x.Dormitory).Include(x=>x.Room).ToListAsync();
-            return students;
+            var users = await _dbContext.Users.Include(x => x.Dormitory).Include(x => x.Room).ToListAsync();
+            return users;
         }
-        public async Task<Student> GetById(int id)
+        public async Task<ApplicationUser> GetById(int id)
         {
-            var student = await _dbContext.Students.FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotImplementedException();
-            return student;
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotImplementedException();
+            return user;
         }
-        public async Task<Student> Update(Student newStudent)
+        public async Task<ApplicationUser> Update(ApplicationUser newuser)
         {
-            var oldStudent = await _dbContext.Students.FirstOrDefaultAsync(x => x.Id == newStudent.Id) ?? throw new NotImplementedException();
-            oldStudent.Name = newStudent.Name;
-            oldStudent.Email = newStudent.Email;
+            var olduser = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == newuser.Id) ?? throw new NotImplementedException();
+            olduser.Name = newuser.Name;
+            olduser.Email = newuser.Email;
             await _dbContext.SaveChangesAsync();
-            return newStudent;
+            return newuser;
         }
         public async Task Delete(int id)
         {
-            var student = await _dbContext.Students.FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotImplementedException();
-            _dbContext.Students.Remove(student);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotImplementedException();
+            _dbContext.Users.Remove(user);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

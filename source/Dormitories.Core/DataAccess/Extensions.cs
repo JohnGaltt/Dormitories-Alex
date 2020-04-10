@@ -1,5 +1,6 @@
 ﻿using Dormitories.Core.BusinessLogic.Managers;
 using Dormitories.Core.DataAccess.Settings;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,8 +30,12 @@ namespace Dormitories.Core.DataAccess
         }
         public static IServiceCollection AddCoreIntegrations(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddApplicationDbContext<ApplicationDbContext>(configuration.GetSection("Database").Get<DatabaseSettings>());
-            services.AddTransient<IStudentManager, StudentManager>();
+            services.AddDbContext<ApplicationDbContext>(config =>
+            {
+                config.UseSqlServer("Data Source=DESKTOP-EC5FMB7\\SQLEXPRESS;Initial Catalog=Dormitory;Integrated Security=True;");
+            });
+
+            services.AddTransient<IUserManager, UserManager>();
             services.AddTransient<IRoomManager, RoomManager>();
             services.AddTransient<IDormitoryManager, DormitoryManager>();
 

@@ -5,8 +5,8 @@ export interface Student {
   id: number;
   name: string;
   email: string;
-  dormitory: Dormitory;
-  dormitoryId: number;
-  room: Room;
-  roomId: number;
+  dormitory?: Dormitory;
+  dormitoryId?: number;
+  room?: Room;
+  roomId?: number;
 }

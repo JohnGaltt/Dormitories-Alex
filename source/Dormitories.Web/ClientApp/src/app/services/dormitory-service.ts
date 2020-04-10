@@ -23,7 +23,6 @@ export class DormitoryService {
   }
 
   getDormitory(id: number): Observable<Dormitory> {
-    debugger;
     return this.http
       .get<Dormitory>(`https://localhost:44372/dormitories/${id}`)
       .pipe(

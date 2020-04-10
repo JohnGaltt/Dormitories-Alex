@@ -1,0 +1,156 @@
+<h1 id="tableLabel">Manage Active Rooms</h1>
+
+<p *ngIf="!rooms"><em>Loading...</em></p>
+
+<nav class="navbar navbar-light bg-light justify-content-between">
+  <div>
+    <button class="btn btn-outline-secondary mr-sm-2" (click)="open(mymodal)">
+      <i class="fa fa-map-marker fa-lg" aria-hidden="true"></i> Add Room
+    </button>
+    <button class="btn btn-outline-secondary">
+      <i class="fa fa-map-marker fa-lg" aria-hidden="true"></i> Add Multiple
+      Rooms
+    </button>
+  </div>
+  <form class="form-inline">
+    <input
+      class="form-control mr-sm-2"
+      type="search"
+      placeholder="Search"
+      aria-label="Search"
+    />
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+      Search
+    </button>
+  </form>
+</nav>
+
+<table class="table table-striped" aria-labelledby="tableLabel" *ngIf="rooms">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Floor</th>
+      <th></th>
+      <th>Dormitory Name</th>
+      <th>Dormitory Address</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let room of rooms">
+      <td>{{ room.name }}</td>
+      <td>{{ room.floor }}</td>
+      <td><i class="fa fa-ellipsis-v fa-sm" aria-hidden="true"></i></td>
+      <td>{{ room.dormitory.name }}</td>
+      <td>{{ room.dormitory.address }}</td>
+    </tr>
+  </tbody>
+</table>
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add Room</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form novalidate (ngSubmit)="onSubmit(saveForm)" #saveForm="ngForm">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            required
+            minlength="3"
+            class="form-control"
+            id="name"
+            [(ngModel)]="room.name"
+            placeholder="Name (required)"
+            name="name"
+            #nameVar="ngModel"
+            [ngClass]="{
+              'is-invalid': (nameVar.touched || nameVar.dirty) && !nameVar.valid
+            }"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="nameVar.errors?.required"
+              >Please enter name of the room</span
+            >
+            <span *ngIf="nameVar.errors?.minlength"
+              >The name must be longer than 3 characters</span
+            >
+          </span>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="floor">Floor</label>
+          <input
+            required
+            minlength="3"
+            type="text"
+            class="form-control"
+            id="floor"
+            [(ngModel)]="room.floor"
+            placeholder="Floor (required)"
+            name="floor"
+            #roomVar="ngModel"
+            [ngClass]="{
+              'is-invalid': (roomVar.touched || roomVar.dirty) && !roomVar.valid
+            }"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="roomVar.errors?.required"
+              >Please enter floor of the room</span
+            >
+            <span *ngIf="roomVar.errors?.minlength"
+              >The floor must be longer than 3 characters</span
+            >
+          </span>
+        </div>
+        <div *ngIf="dormitories" class="form-group col-md-6">
+          <select
+            required
+            class="form-control"
+            id="dormitories"
+            name="dormitories"
+            #dormitoriesVar="ngModel"
+            [(ngModel)]="room.dormitoryId"
+            [ngClass]="{
+              'is-invalid':
+                (dormitoriesVar.touched || dormitoriesVar.dirty) &&
+                !dormitoriesVar.valid
+            }"
+          >
+            <option
+              *ngFor="let dormitory of dormitories"
+              [ngValue]="dormitory.id"
+              [selected]="dormitories[0].id"
+            >
+              {{ dormitory.name }}
+            </option>
+          </select>
+          <span class="invalid-feedback">
+            <span *ngIf="dormitoriesVar.errors?.required"
+              >Please select dormitory</span
+            >
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="onSubmit()">
+      Submit
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="modal.close('Save click')"
+    >
+      Exit
+    </button>
+  </div>
+</ng-template>

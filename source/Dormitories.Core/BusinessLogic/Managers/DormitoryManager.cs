@@ -18,7 +18,7 @@ namespace Dormitories.Core.BusinessLogic.Managers
         public async Task<Dormitory> Create(Dormitory newDormitory)
         {
             var oldDormitory = await GetByName(newDormitory.Name);
-            if(oldDormitory != null)
+            if (oldDormitory != null)
             {
                 //Conflict
                 throw new InvalidOperationException("Conflict");
@@ -31,7 +31,7 @@ namespace Dormitories.Core.BusinessLogic.Managers
 
         public async Task Delete(int id)
         {
-            var dormitory = await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Id == id) 
+            var dormitory = await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Id == id)
                 ?? throw new InvalidOperationException("Not Found");
             _dbContext.Dormitories.Remove(dormitory);
             await _dbContext.SaveChangesAsync();

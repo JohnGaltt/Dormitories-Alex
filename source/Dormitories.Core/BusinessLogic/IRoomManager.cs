@@ -9,6 +9,7 @@ namespace Dormitories.Core.BusinessLogic.Managers
         Task<Room> Create(Room student);
         Task<List<Room>> Get();
         Task<Room> GetById(int id);
+        Task<List<Room>> GetByDormitoryId(int dormitoryId);
         Task<Room> Update(Room newStudent);
         Task Delete(int id);
     }

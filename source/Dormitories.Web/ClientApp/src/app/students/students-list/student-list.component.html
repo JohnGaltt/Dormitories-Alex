@@ -44,7 +44,20 @@
     <tr *ngFor="let student of students">
       <td>{{ student.name }}</td>
       <td>{{ student.email }}</td>
-      <td><i class="fa fa-ellipsis-v fa-sm" aria-hidden="true"></i></td>
+      <td>
+        <i
+          [ngbPopover]="popContent"
+          class="fa fa-ellipsis-v fa-sm"
+          aria-hidden="true"
+        >
+        </i>
+        <ng-template #popContent>
+          <app-delete-button
+            [elementId]="student.id"
+            (removeClicked)="onRemoveElement($event)"
+          ></app-delete-button>
+        </ng-template>
+      </td>
       <td>{{ student.dormitory.name }}</td>
       <td>{{ student.dormitory.address }}</td>
       <td>{{ student.room.name }}</td>
@@ -125,7 +138,7 @@
             id="dormitories"
             name="dormitories"
             #dormitoriesVar="ngModel"
-            [(ngModel)]="student.dormitory.id"
+            [(ngModel)]="student.dormitoryId"
             [ngClass]="{
               'is-invalid':
                 (dormitoriesVar.touched || dormitoriesVar.dirty) &&
@@ -147,11 +160,36 @@
             >
           </span>
         </div>
+        <div *ngIf="rooms" class="form-group col-md-6">
+          <select
+            required
+            class="form-control"
+            id="rooms"
+            name="rooms"
+            #roomsVar="ngModel"
+            [(ngModel)]="student.roomId"
+            [ngClass]="{
+              'is-invalid':
+                (roomsVar.touched || roomsVar.dirty) && !roomsVar.valid
+            }"
+          >
+            <option
+              *ngFor="let room of rooms"
+              [ngValue]="room.id"
+              [selected]="rooms[0].id"
+            >
+              {{ room.name }}
+            </option>
+          </select>
+          <span class="invalid-feedback">
+            <span *ngIf="roomsVar.errors?.required">Please select room</span>
+          </span>
+        </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="OnClick()">
+    <button type="button" class="btn btn-primary" (click)="onSubmit()">
       Submit
     </button>
     <button

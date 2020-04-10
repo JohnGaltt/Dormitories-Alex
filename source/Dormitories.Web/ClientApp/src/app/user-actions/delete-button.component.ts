@@ -11,6 +11,7 @@ export class DeleteButtonComponent {
   constructor() {}
 
   removeElement(): void {
+    debugger;
     this.removeClicked.emit(this.elementId);
   }
 }

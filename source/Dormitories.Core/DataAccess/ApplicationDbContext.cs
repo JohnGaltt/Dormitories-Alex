@@ -1,41 +1,25 @@
 ﻿using Dormitories.Core.DataAccess.Settings;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
 
 namespace Dormitories.Core.DataAccess
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>,int>
     {
-        public DbSet<Student> Students { get; set; }
         public DbSet<Dormitory> Dormitories { get; set; }
         public DbSet<Room> Rooms { get; set; }
 
-        private readonly DatabaseSettings _databaseOptions;
-
-        public ApplicationDbContext()
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+       : base(options)
         {
-
-        }
-
-        public ApplicationDbContext(IOptions<DatabaseSettings> databaseOptions)
-        {
-            if (databaseOptions.Value == null)
-            {
-                throw new ArgumentNullException(nameof(databaseOptions));
-            }
-
-            if (string.IsNullOrEmpty(databaseOptions.Value.ConnectionString))
-            {
-                throw new ArgumentException("Database connection string is null or empty.");
-            }
-
-            _databaseOptions = databaseOptions.Value;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            Student.Build(modelBuilder);
+            ApplicationUser.Build(modelBuilder);
             Room.Build(modelBuilder);
             Dormitory.Build(modelBuilder);
             base.OnModelCreating(modelBuilder);
@@ -44,8 +28,7 @@ namespace Dormitories.Core.DataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_databaseOptions.ConnectionString);
-            
+            optionsBuilder.UseSqlServer("Data Source=DESKTOP-EC5FMB7\\SQLEXPRESS;Initial Catalog=Dormitory;Integrated Security=True;");
         }
     }
 }
