@@ -9,12 +9,4 @@ import { OpenIdConnectService } from "./shared/open-id-connect.service";
 export class AppComponent {
   title = "app";
   constructor(private openIdConnectService: OpenIdConnectService) {}
-  ngOnInit() {
-    var path = window.location.pathname;
-    if (path != "/signin-oidc") {
-      if (!this.openIdConnectService.userAvailable) {
-        this.openIdConnectService.triggerSignIn();
-      }
-    }
-  }
-}
+Y}

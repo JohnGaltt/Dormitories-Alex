@@ -1,15 +1,15 @@
-<h1 id="tableLabel">Manage Active Students</h1>
+<h1 id="tableLabel">Manage Active Users</h1>
 
-<p *ngIf="!students"><em>Loading...</em></p>
+<p *ngIf="!users"><em>Loading...</em></p>
 
 <nav class="navbar navbar-light bg-light justify-content-between">
   <div>
     <button class="btn btn-outline-secondary mr-sm-2" (click)="open(mymodal)">
-      <i class="fa fa-user-plus" aria-hidden="true"></i> Add Student
+      <i class="fa fa-user-plus" aria-hidden="true"></i> Add User
     </button>
     <button class="btn btn-outline-secondary">
       <i class="fa fa-users fa-lg"></i>
-      Add Multiple Students
+      Add Multiple Users
     </button>
   </div>
   <form class="form-inline">
@@ -25,11 +25,7 @@
   </form>
 </nav>
 
-<table
-  class="table table-striped"
-  aria-labelledby="tableLabel"
-  *ngIf="students"
->
+<table class="table table-striped" aria-labelledby="tableLabel" *ngIf="users">
   <thead>
     <tr>
       <th>Name</th>
@@ -38,12 +34,14 @@
       <th>Dormitory Name</th>
       <th>Dormitory Address</th>
       <th>Room Name</th>
+      <th>Room Floor</th>
+      <th>Roles</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let student of students">
-      <td>{{ student.name }}</td>
-      <td>{{ student.email }}</td>
+    <tr *ngFor="let user of users">
+      <td>{{ user.userName }}</td>
+      <td>{{ user.email }}</td>
       <td>
         <i
           [ngbPopover]="popContent"
@@ -53,14 +51,16 @@
         </i>
         <ng-template #popContent>
           <app-delete-button
-            [elementId]="student.id"
+            [elementId]="user.id"
             (removeClicked)="onRemoveElement($event)"
           ></app-delete-button>
         </ng-template>
       </td>
-      <td>{{ student.dormitory.name }}</td>
-      <td>{{ student.dormitory.address }}</td>
-      <td>{{ student.room.name }}</td>
+      <td>{{ user.dormitoryName }}</td>
+      <td>{{ user.dormitoryAddress }}</td>
+      <td>{{ user.roomName }}</td>
+      <td>{{ user.roomFloor }}</td>
+      <td>{{ user.roles }}</td>
     </tr>
   </tbody>
 </table>
@@ -88,7 +88,7 @@
             minlength="3"
             class="form-control"
             id="name"
-            [(ngModel)]="student.name"
+            [(ngModel)]="user.name"
             placeholder="Name (required)"
             name="name"
             #nameVar="ngModel"
@@ -98,7 +98,7 @@
           />
           <span class="invalid-feedback">
             <span *ngIf="nameVar.errors?.required"
-              >Please enter name of the student</span
+              >Please enter name of the user</span
             >
             <span *ngIf="nameVar.errors?.minlength"
               >The name must be longer than 3 characters</span
@@ -113,7 +113,7 @@
             type="text"
             class="form-control"
             id="email"
-            [(ngModel)]="student.email"
+            [(ngModel)]="user.email"
             placeholder="Email (required)"
             name="email"
             #emailVar="ngModel"
@@ -124,7 +124,7 @@
           />
           <span class="invalid-feedback">
             <span *ngIf="emailVar.errors?.required"
-              >Please enter email of the student</span
+              >Please enter email of the user</span
             >
             <span *ngIf="emailVar.errors?.minlength"
               >The address must be longer than 3 characters</span
@@ -138,7 +138,7 @@
             id="dormitories"
             name="dormitories"
             #dormitoriesVar="ngModel"
-            [(ngModel)]="student.dormitoryId"
+            [(ngModel)]="user.dormitoryId"
             [ngClass]="{
               'is-invalid':
                 (dormitoriesVar.touched || dormitoriesVar.dirty) &&
@@ -167,7 +167,7 @@
             id="rooms"
             name="rooms"
             #roomsVar="ngModel"
-            [(ngModel)]="student.roomId"
+            [(ngModel)]="user.roomId"
             [ngClass]="{
               'is-invalid':
                 (roomsVar.touched || roomsVar.dirty) && !roomsVar.valid

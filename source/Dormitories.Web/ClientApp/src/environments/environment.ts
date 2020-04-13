@@ -11,6 +11,7 @@ export const environment = {
     redirect_uri: "https://localhost:4200/signin-oidc",
     scope: "openid profile",
     response_type: "id_token",
+    post_logout_redirect_uris: "https://localhost:4200/",
   },
 };
 

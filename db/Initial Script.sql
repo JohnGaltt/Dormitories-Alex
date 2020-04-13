@@ -38,7 +38,7 @@ INSERT INTO Dormitories VALUES
 ('Гуртожиток №9', 'Лукаша 9')
 
 INSERT INTO Rooms VALUES
-('112', 1, 4),
+('112', 1, 1),
 ('212', 2, 5),
 ('312', 3, 6),
 ('412', 4, 7),
@@ -61,3 +61,51 @@ INSERT INTO Students VALUES
 ('Сергій', 'sergio@gmail.com', 9, 9),
 ('Вася', 'vasya@gmail.com', 10, 10),
 ('Олег', 'oleg@gmail.com', 11, 11);
+
+
+INSERT INTO [dbo].[AspNetUsers]
+           ([UserName]
+           ,[NormalizedUserName]
+           ,[Email]
+           ,[NormalizedEmail]
+           ,[EmailConfirmed]
+           ,[PasswordHash]
+           ,[SecurityStamp]
+           ,[ConcurrencyStamp]
+           ,[PhoneNumber]
+           ,[PhoneNumberConfirmed]
+           ,[TwoFactorEnabled]
+           ,[LockoutEnd]
+           ,[LockoutEnabled]
+           ,[AccessFailedCount]
+           ,[Name]
+           ,[DormitoryId]
+           ,[RoomId])
+     VALUES
+           (null
+           ,null
+           ,null
+           ,null
+           ,0
+           ,null
+           ,null
+           ,null
+           ,null
+           ,0
+           ,0
+           ,null
+           ,0
+           ,0
+           ,'alex'
+           ,1
+           ,null)
+GO
+
+	  INSERT INTO [dbo].[AspNetRoles] VALUES('Student',null,null)
+	  INSERT INTO [dbo].[AspNetRoles] VALUES('Staff',null,null)
+
+	  SELECT * FROM [dbo].[AspNetRoles]
+	  SELECT * FROM [dbo].[AspNetUsers]
+	  SELECT * FROM [dbo].[AspNetUserRoles]
+
+	  INSERT INTO [dbo].[AspNetUserRoles] VALUES(2,1)

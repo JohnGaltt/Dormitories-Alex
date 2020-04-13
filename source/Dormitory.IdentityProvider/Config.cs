@@ -12,22 +12,11 @@ namespace Dormitory.IdentityProvider
 {
     public static class Config
     {
-        public static List<TestUser> GetUsers()
-        {
-            return new List<TestUser>
-            {
-                new TestUser
-                {
-                    Username = "Frank",
-                    Password = "Password",
-                    SubjectId = "123",
-                    Claims = new List<Claim>
-                    {
-                        new Claim("given_name", "Franks")
-                    }
-                }
-            };
-        }
+
+        public static IEnumerable<ApiResource> GetApis() =>
+             new List<ApiResource> {
+                new ApiResource("dormitoryapi")
+        };
 
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
@@ -47,6 +36,7 @@ namespace Dormitory.IdentityProvider
                     ClientId = "dormitoriesclient",
                     ClientName = "Dormitory Client",
                     AllowedGrantTypes = GrantTypes.Implicit,
+
                     RequireConsent = false,
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
@@ -62,28 +52,14 @@ namespace Dormitory.IdentityProvider
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                          IdentityServerConstants.StandardScopes.Profile,
-                         "dormitoryapi"
+                         "dormitoryapi",
+                         "roles"
                     },
                     AllowedCorsOrigins = new List<string>
                     {
                         "https://127.0.0.1:4200",
                         "https://localhost:4200"
                     }
-                },
-                new Client
-                {
-                    ClientId = "client_id",
-                    ClientSecrets =  {new Secret("client_secret".ToSha256()) },
-                    AllowedGrantTypes = GrantTypes.Code,
-
-                    RedirectUris = { "https://localhost:44356/signin-oidc" },
-
-                    AllowedScopes = new[]
-                    {
-                        "ApiOne", IdentityServerConstants.StandardScopes.OpenId,
-                         IdentityServerConstants.StandardScopes.Profile
-                    },
-                    RequireConsent = false
                 }
             };
         }

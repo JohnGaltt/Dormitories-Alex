@@ -1,17 +1,28 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Dormitories.Core.DataAccess.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Generic;
 
 namespace Dormitories.Core.DataAccess
 {
     public class ApplicationUser : IdentityUser<int>
-    {   
+    {
+        public ApplicationUser(string name, int dormitoryId, int? roomId = null)
+        {
+            Name = name;
+            UserName = name;
+            DormitoryId = dormitoryId;
+            RoomId = roomId;
+        }
+
         public string Name { get; set; }
         public Dormitory Dormitory { get; set; }
         public int DormitoryId { get; set; }
         public Room Room { get; set; }
         public int? RoomId { get; set; }
-        
+        public ICollection<ApplicationUserRole> UserRoles { get; set; }
+
 
         public static void Build(ModelBuilder modelBuilder)
         {

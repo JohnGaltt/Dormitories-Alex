@@ -1,25 +1,29 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Student } from "src/app/models/student";
+import { User } from "src/app/models/user";
 import { Dormitory } from "src/app/models/dormitory";
 import { DormitoryService } from "src/app/services/dormitory-service";
 import { RoomService } from "src/app/services/room-service";
 import { Room } from "src/app/models/room";
-import { StudentService } from "src/app/services/student-service";
+import { UserService } from "src/app/services/student-service";
 
 @Component({
   selector: "app-student-list",
   templateUrl: "./student-list.component.html",
 })
 export class StudentListComponent implements OnInit {
-  public student: Student = {
+  public user: User = {
     id: 0,
     name: "",
     email: "",
+    dormitoryAddress: "",
+    dormitoryName: "",
+    roomFloor: "",
+    roomName: "",
   };
 
-  public students: Student[];
+  public users: User[];
   public dormitories: Dormitory[];
   public rooms: Room[];
 
@@ -28,7 +32,7 @@ export class StudentListComponent implements OnInit {
     private modalService: NgbModal,
     private dormitoryService: DormitoryService,
     private roomService: RoomService,
-    private studentService: StudentService
+    private userService: UserService
   ) {}
 
   onChange(dormitoryId: number) {
@@ -39,29 +43,29 @@ export class StudentListComponent implements OnInit {
       (error) => console.error(error)
     );
   }
-  getStudents() {
-    this.studentService.getStudents().subscribe(
+  getUsers() {
+    this.userService.getUsers().subscribe(
       (result) => {
-        this.students = result;
+        this.users = result;
       },
       (error) => console.error(error)
     );
   }
   onSubmit(): void {
-    this.studentService.createStudent(this.student).subscribe(
+    this.userService.createUser(this.user).subscribe(
       (result) => {
-        this.getStudents();
+        this.getUsers();
         this.modalService.dismissAll();
       },
       (error) => console.error(error)
     );
   }
 
-  onRemoveElement(studentId: number): void {
+  onRemoveElement(userId: number): void {
     debugger;
-    this.studentService.deleteStudent(studentId).subscribe(
+    this.userService.deleteUser(userId).subscribe(
       (result) => {
-        this.getStudents();
+        this.getUsers();
       },
       (error) => console.error(error)
     );
@@ -79,6 +83,6 @@ export class StudentListComponent implements OnInit {
     );
   }
   ngOnInit(): void {
-    this.getStudents();
+    this.getUsers();
   }
 }

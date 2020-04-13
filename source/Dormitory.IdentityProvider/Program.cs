@@ -1,3 +1,4 @@
+using Dormitories.Core.DataAccess;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,10 +14,15 @@ namespace Dormitory.IdentityProvider
 
             using (var scope = host.Services.CreateScope())
             {
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-                var user = new IdentityUser("bob");
-                userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
+                var oldUser = userManager.FindByNameAsync("alexandr").GetAwaiter().GetResult();
+                if(oldUser == null)
+                {
+                    var user = new ApplicationUser("alexandr", 1,2);
+
+                    userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
+                }
             }
 
             host.Run();

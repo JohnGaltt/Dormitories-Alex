@@ -8,41 +8,39 @@ import {
 import { Dormitory } from "../models/dormitory";
 import { Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
-import { Student } from "../models/student";
+import { User } from "../models/user";
 @Injectable({
   providedIn: "root",
 })
-export class StudentService {
+export class UserService {
   constructor(private http: HttpClient) {}
-  getStudents(): Observable<Student[]> {
-    return this.http.get<Student[]>("https://localhost:44372/students").pipe(
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>("https://localhost:44372/users").pipe(
       tap((data) => console.log("All: " + JSON.stringify(data))),
       catchError(this.handleError)
     );
   }
 
-  getStudent(id: number): Observable<Student> {
+  getUser(id: number): Observable<User> {
+    return this.http.get<User>(`https://localhost:44372/users/${id}`).pipe(
+      tap((data) => console.log("All: " + JSON.stringify(data))),
+      catchError(this.handleError)
+    );
+  }
+
+  createUser(User: User): Observable<User> {
     return this.http
-      .get<Student>(`https://localhost:44372/students/${id}`)
+      .post<User>("https://localhost:44372/users/create", User)
       .pipe(
         tap((data) => console.log("All: " + JSON.stringify(data))),
         catchError(this.handleError)
       );
   }
 
-  createStudent(student: Student): Observable<Student> {
-    return this.http
-      .post<Student>("https://localhost:44372/students/create", student)
-      .pipe(
-        tap((data) => console.log("All: " + JSON.stringify(data))),
-        catchError(this.handleError)
-      );
-  }
-
-  updateStudent(student: Student): Observable<Student> {
+  updateUser(User: User): Observable<User> {
     const headers = new HttpHeaders({ "Content-Type": "application/json" });
     return this.http
-      .put<Student>(`https://localhost:44372/students/${student.id}`, student, {
+      .put<User>(`https://localhost:44372/users/${User.id}`, User, {
         headers: headers,
       })
       .pipe(
@@ -51,8 +49,8 @@ export class StudentService {
       );
   }
 
-  deleteStudent(id: number): Observable<{}> {
-    return this.http.delete<{}>(`https://localhost:44372/students/${id}`).pipe(
+  deleteUser(id: number): Observable<{}> {
+    return this.http.delete<{}>(`https://localhost:44372/users/${id}`).pipe(
       tap((data) => console.log("All: " + JSON.stringify(data))),
       catchError(this.handleError)
     );

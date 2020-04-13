@@ -6,7 +6,7 @@ import { DormitoryService } from "../services/dormitory-service";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
 
-@Component({
+@Component({  
   selector: "dormitory-list",
   templateUrl: "./dormitory-list.component.html",
 })

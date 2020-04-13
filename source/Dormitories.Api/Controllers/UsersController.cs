@@ -1,6 +1,7 @@
 ﻿using Dormitories.Core.BusinessLogic.Managers;
 using Dormitories.Core.DataAccess;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -10,13 +11,18 @@ namespace Dormitories.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserManager _userManager;
+
         public UsersController(IUserManager studentManager)
         {
             _userManager = studentManager;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get() => Ok(await _userManager.Get());
+        public async Task<IActionResult> Get()
+        {
+            var users = await _userManager.Get();
+            return Ok(users);
+        }
 
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody]ApplicationUser student) => Ok(await _userManager.Create(student));

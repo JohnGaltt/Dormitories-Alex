@@ -16,6 +16,7 @@ import { DeleteButtonComponent } from "./user-actions/delete-button.component";
 import { DormitoryEditComponent } from "./dormitories/dormitory-edit.component";
 import { SigninOidcComponent } from "./signin-oidc/signin-oidc.component";
 import { OpenIdConnectService } from "./shared/open-id-connect.service";
+import { RequireAuthenticatedUserRouteGuardService } from "./shared/require-authenticated-user-route-guard.service";
 
 @NgModule({
   declarations: [
@@ -36,15 +37,39 @@ import { OpenIdConnectService } from "./shared/open-id-connect.service";
     FormsModule,
     NgbModule,
     RouterModule.forRoot([
-      { path: "", component: HomeComponent, pathMatch: "full" },
-      { path: "student-list", component: StudentListComponent },
-      { path: "room-list", component: RoomListComponent },
-      { path: "dormitory-list", component: DormitoryListComponent },
-      { path: "dormitory/:id/edit", component: DormitoryEditComponent },
-      { path: "signin-oidc", component: SigninOidcComponent },
+      {
+        path: "",
+        component: HomeComponent,
+        pathMatch: "full",
+        canActivate: [RequireAuthenticatedUserRouteGuardService],
+      },
+      {
+        path: "student-list",
+        component: StudentListComponent,
+        canActivate: [RequireAuthenticatedUserRouteGuardService],
+      },
+      {
+        path: "room-list",
+        component: RoomListComponent,
+        canActivate: [RequireAuthenticatedUserRouteGuardService],
+      },
+      {
+        path: "dormitory-list",
+        component: DormitoryListComponent,
+        canActivate: [RequireAuthenticatedUserRouteGuardService],
+      },
+      {
+        path: "dormitory/:id/edit",
+        component: DormitoryEditComponent,
+        canActivate: [RequireAuthenticatedUserRouteGuardService],
+      },
+      {
+        path: "signin-oidc",
+        component: SigninOidcComponent,
+      },
     ]),
   ],
-  providers: [OpenIdConnectService],
+  providers: [OpenIdConnectService, RequireAuthenticatedUserRouteGuardService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

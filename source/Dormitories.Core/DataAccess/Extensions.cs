@@ -1,4 +1,5 @@
 ﻿using Dormitories.Core.BusinessLogic.Managers;
+using Dormitories.Core.DataAccess.Models;
 using Dormitories.Core.DataAccess.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -6,8 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Dormitories.Core.DataAccess
 {

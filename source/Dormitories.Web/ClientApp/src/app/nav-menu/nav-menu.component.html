@@ -20,12 +20,18 @@
         [ngClass]="{ show: isExpanded }"
       >
         <ul class="navbar-nav flex-grow">
-          <li
-            class="nav-item"
-            [routerLinkActive]="['link-active']"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
-            <a class="nav-link text-white" [routerLink]="['/']">Login</a>
+          <li class="nav-item" *ngIf="openIdConnectService.userAvailable">
+            <span></span>
+            <a class="nav-link text-white"
+              >Hi, {{ openIdConnectService.user.profile.name }}</a
+            >
+          </li>
+          <li class="nav-item" *ngIf="openIdConnectService.userAvailable">
+            <a
+              class="nav-link text-white"
+              (click)="openIdConnectService.triggerSignOut()"
+              >Sign Out</a
+            >
           </li>
         </ul>
       </div>

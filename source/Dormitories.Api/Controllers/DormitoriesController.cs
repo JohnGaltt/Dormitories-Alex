@@ -1,5 +1,6 @@
 ﻿using Dormitories.Core.BusinessLogic.Managers;
 using Dormitories.Core.DataAccess;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

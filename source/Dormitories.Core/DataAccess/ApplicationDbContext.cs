@@ -1,13 +1,13 @@
-﻿using Dormitories.Core.DataAccess.Settings;
+﻿using Dormitories.Core.DataAccess.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System;
 
 namespace Dormitories.Core.DataAccess
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>,int>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole,
+        int, IdentityUserClaim<int>, ApplicationUserRole,
+        IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public DbSet<Dormitory> Dormitories { get; set; }
         public DbSet<Room> Rooms { get; set; }
@@ -19,10 +19,12 @@ namespace Dormitories.Core.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             ApplicationUser.Build(modelBuilder);
             Room.Build(modelBuilder);
             Dormitory.Build(modelBuilder);
-            base.OnModelCreating(modelBuilder);
+            ApplicationUserRole.Build(modelBuilder);
+
         }
 
 
