@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dormitories.Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Staff")]
     [Route("rooms")]
     public class RoomsController : ControllerBase
     {

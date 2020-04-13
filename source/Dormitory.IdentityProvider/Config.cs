@@ -15,7 +15,7 @@ namespace Dormitory.IdentityProvider
 
         public static IEnumerable<ApiResource> GetApis() =>
              new List<ApiResource> {
-                new ApiResource("dormitoryapi")
+                new ApiResource("dormitoryapi", "Dormitory Api", new []{"role"})
         };
 
         public static IEnumerable<IdentityResource> GetIdentityResources()
@@ -23,7 +23,8 @@ namespace Dormitory.IdentityProvider
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                 new IdentityResource("roles", "Your role(s)", new []{"role"}),
             };
         }
 

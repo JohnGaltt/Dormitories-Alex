@@ -9,7 +9,7 @@ export const environment = {
     authority: "https://localhost:44307/",
     client_id: "dormitoriesclient",
     redirect_uri: "https://localhost:4200/signin-oidc",
-    scope: "openid profile dormitoryapi",
+    scope: "openid profile roles dormitoryapi",
     response_type: "id_token token",
     post_logout_redirect_uris: "https://localhost:4200/",
   },
