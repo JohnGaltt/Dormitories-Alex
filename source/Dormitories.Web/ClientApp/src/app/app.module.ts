@@ -17,6 +17,7 @@ import { DormitoryEditComponent } from "./dormitories/dormitory-edit.component";
 import { SigninOidcComponent } from "./signin-oidc/signin-oidc.component";
 import { OpenIdConnectService } from "./shared/open-id-connect.service";
 import { RequireAuthenticatedUserRouteGuardService } from "./shared/require-authenticated-user-route-guard.service";
+import { AddAuthorizationHeaderInterceptor } from "./shared/add-authorization-header-interceptor";
 
 @NgModule({
   declarations: [
@@ -69,7 +70,15 @@ import { RequireAuthenticatedUserRouteGuardService } from "./shared/require-auth
       },
     ]),
   ],
-  providers: [OpenIdConnectService, RequireAuthenticatedUserRouteGuardService],
+  providers: [
+    OpenIdConnectService,
+    RequireAuthenticatedUserRouteGuardService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AddAuthorizationHeaderInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,10 +1,12 @@
 ﻿using Dormitories.Core.BusinessLogic.Managers;
 using Dormitories.Core.DataAccess;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Dormitories.Api.Controllers
 {
+    [Authorize]
     [Route("rooms")]
     public class RoomsController : ControllerBase
     {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dormitories.Api.Controllers
 {
+    [Authorize]
     [Route("dormitories")]
     public class DormitoriesController : ControllerBase
     {
