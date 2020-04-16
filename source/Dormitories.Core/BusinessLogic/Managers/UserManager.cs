@@ -1,6 +1,5 @@
 ﻿using Dormitories.Core.DataAccess;
 using Dormitories.Core.DataAccess.ViewModels;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

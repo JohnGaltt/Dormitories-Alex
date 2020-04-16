@@ -1,4 +1,5 @@
-﻿using Dormitories.Core.BusinessLogic.Managers;
+﻿using Dormitories.Api.ViewModels;
+using Dormitories.Core.BusinessLogic.Managers;
 using Dormitories.Core.DataAccess;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Dormitories.Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Staff")]
     [Route("dormitories")]
     public class DormitoriesController : ControllerBase
     {
@@ -21,7 +22,7 @@ namespace Dormitories.Api.Controllers
 
         [Route("create")]
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]Dormitory dormitory)
+        public async Task<IActionResult> Create([FromBody]DormitoryViewModel dormitory)
         {
             var dormitorynew = await _dormitoryManager.Create(dormitory);
             return Ok(dormitory);
@@ -43,7 +44,7 @@ namespace Dormitories.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit([FromQuery]int id, [FromBody]Dormitory dormitory)
+        public async Task<IActionResult> Edit([FromQuery]int id, [FromBody]DormitoryViewModel dormitory)
         {
             await _dormitoryManager.Update(dormitory);
             return Ok();

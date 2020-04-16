@@ -109,3 +109,4 @@ GO
 	  SELECT * FROM [dbo].[AspNetUserRoles]
 
 	  INSERT INTO [dbo].[AspNetUserRoles] VALUES(2,1)
+	  INSERT INTO [dbo].[AspNetUserRoles] VALUES(3,2)

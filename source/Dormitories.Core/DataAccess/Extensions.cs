@@ -1,4 +1,5 @@
-﻿using Dormitories.Core.BusinessLogic.Managers;
+﻿using AutoMapper;
+using Dormitories.Core.BusinessLogic.Managers;
 using Dormitories.Core.DataAccess.Models;
 using Dormitories.Core.DataAccess.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -33,6 +34,8 @@ namespace Dormitories.Core.DataAccess
             {
                 config.UseSqlServer("Data Source=DESKTOP-EC5FMB7\\SQLEXPRESS;Initial Catalog=Dormitory;Integrated Security=True;");
             });
+
+            services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddTransient<IUserManager, UserManager>();
             services.AddTransient<IRoomManager, RoomManager>();

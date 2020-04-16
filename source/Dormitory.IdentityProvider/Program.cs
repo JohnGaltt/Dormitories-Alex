@@ -17,9 +17,16 @@ namespace Dormitory.IdentityProvider
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
                 var oldUser = userManager.FindByNameAsync("alexandr").GetAwaiter().GetResult();
-                if(oldUser == null)
+                var oldStaffUser = userManager.FindByNameAsync("petro").GetAwaiter().GetResult();
+                if (oldUser == null)
                 {
                     var user = new ApplicationUser("alexandr", 1,2);
+
+                    userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
+                }
+                if (oldStaffUser == null)
+                {
+                    var user = new ApplicationUser("petro", 1, 2);
 
                     userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
                 }

@@ -1,4 +1,6 @@
-﻿using Dormitories.Core.DataAccess;
+﻿using AutoMapper;
+using Dormitories.Api.ViewModels;
+using Dormitories.Core.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,24 +11,27 @@ namespace Dormitories.Core.BusinessLogic.Managers
     public class DormitoryManager : IDormitoryManager
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public DormitoryManager(ApplicationDbContext dbContext)
+        public DormitoryManager(ApplicationDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
-        public async Task<Dormitory> Create(Dormitory newDormitory)
+        public async Task<DormitoryViewModel> Create(DormitoryViewModel newDormitoryDto)
         {
-            var oldDormitory = await GetByName(newDormitory.Name);
+            var oldDormitory = await GetByName(newDormitoryDto.Name);
             if (oldDormitory != null)
             {
                 //Conflict
                 throw new InvalidOperationException("Conflict");
             }
+            var newDormitory = _mapper.Map<Dormitory>(newDormitoryDto);
             await _dbContext.AddAsync(newDormitory);
             await _dbContext.SaveChangesAsync();
 
-            return newDormitory;
+            return newDormitoryDto;
         }
 
         public async Task Delete(int id)
@@ -37,28 +42,27 @@ namespace Dormitories.Core.BusinessLogic.Managers
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Dormitory>> Get()
+        public async Task<List<DormitoryViewModel>> Get()
         {
-            return await _dbContext.Dormitories.ToListAsync();
+            return _mapper.Map<List<DormitoryViewModel>>(await _dbContext.Dormitories.ToListAsync());
         }
 
-        public async Task<Dormitory> GetById(int id)
+        public async Task<DormitoryViewModel> GetById(int id)
         {
-            return await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Id == id);
+            return _mapper.Map<DormitoryViewModel>(await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Id == id));
         }
 
-        public async Task<Dormitory> GetByName(string name)
+        public async Task<DormitoryViewModel> GetByName(string name)
         {
-            return await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Name == name);
+            return _mapper.Map<DormitoryViewModel>(await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Name == name));
         }
 
-        public async Task<Dormitory> Update(Dormitory updatedDormitory)
+        public async Task<DormitoryViewModel> Update(DormitoryViewModel updatedDormitory)
         {
             var existingDormitory = await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Id == updatedDormitory.Id) ?? throw new NotImplementedException();
-            existingDormitory.Name = updatedDormitory.Name;
-            existingDormitory.Address = updatedDormitory.Address;
+            _mapper.Map(existingDormitory, updatedDormitory);
             await _dbContext.SaveChangesAsync();
-            return existingDormitory;
+            return updatedDormitory;
         }
     }
 }

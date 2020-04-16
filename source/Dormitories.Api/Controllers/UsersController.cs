@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Dormitories.Api.Controllers
 {
-    [Authorize(Roles = "Student")]
+    [Authorize(Roles = "Staff")]
     [Route("users")]
     public class UsersController : ControllerBase
     {

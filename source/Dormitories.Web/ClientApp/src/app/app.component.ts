@@ -7,6 +7,7 @@ import { OpenIdConnectService } from "./shared/open-id-connect.service";
   styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
+  constructor(private openIdConnectService: OpenIdConnectService) {
+  }
   title = "app";
-  constructor(private openIdConnectService: OpenIdConnectService) {}
-Y}
+}

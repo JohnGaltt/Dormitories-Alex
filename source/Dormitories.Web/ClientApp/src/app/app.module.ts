@@ -18,6 +18,7 @@ import { SigninOidcComponent } from "./signin-oidc/signin-oidc.component";
 import { OpenIdConnectService } from "./shared/open-id-connect.service";
 import { RequireAuthenticatedUserRouteGuardService } from "./shared/require-authenticated-user-route-guard.service";
 import { AddAuthorizationHeaderInterceptor } from "./shared/add-authorization-header-interceptor";
+import { StudentProfileComponentComponent } from "./profile/student-profile-component/student-profile-component.component";
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { AddAuthorizationHeaderInterceptor } from "./shared/add-authorization-he
     DeleteButtonComponent,
     DormitoryEditComponent,
     SigninOidcComponent,
+    StudentProfileComponentComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -62,6 +64,11 @@ import { AddAuthorizationHeaderInterceptor } from "./shared/add-authorization-he
       {
         path: "dormitory/:id/edit",
         component: DormitoryEditComponent,
+        canActivate: [RequireAuthenticatedUserRouteGuardService],
+      },
+      {
+        path: "profile",
+        component: StudentProfileComponentComponent,
         canActivate: [RequireAuthenticatedUserRouteGuardService],
       },
       {

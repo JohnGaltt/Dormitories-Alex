@@ -3,39 +3,47 @@
   <nav id="sidebar">
     <ul class="list-unstyled components">
       <li>
-        <a
-          [routerLink]="['/counter']"
-          data-toggle="collapse"
-          aria-expanded="false"
-          class="dropdown-toggle"
-          ><i class="fa fa-home fa-lg"></i> Home</a
-        >
-        <ul class="collapse list-unstyled" id="homeSubmenu">
-          <li>
-            <a href="#">Home 1</a>
-          </li>
-          <li>
-            <a href="#">Home 2</a>
-          </li>
-          <li>
-            <a href="#">Home 3</a>
-          </li>
-        </ul>
+        <a><i class="fa fa-home fa-lg"></i> Home</a>
       </li>
-      <li>
+      <li
+        *ngIf="
+          this.openIdConnectService.userAvailable &&
+          this.openIdConnectService.user.profile.role == 'Staff'
+        "
+      >
         <a [routerLink]="['/student-list']"
           ><i class="fa fa-users fa-lg"></i>Users</a
         >
       </li>
-      <li>
+      <li
+        *ngIf="
+          this.openIdConnectService.userAvailable &&
+          this.openIdConnectService.user.profile.role == 'Staff'
+        "
+      >
         <a href="#" [routerLink]="['/dormitory-list']"
           ><i class="fa fa-building-o fa-lg" aria-hidden="true"></i
           >Dormitories</a
         >
       </li>
-      <li>
+      <li
+        *ngIf="
+          this.openIdConnectService.userAvailable &&
+          this.openIdConnectService.user.profile.role == 'Staff'
+        "
+      >
         <a href="#" [routerLink]="['/room-list']"
           ><i class="fa fa-map-marker fa-lg" aria-hidden="true"></i>Rooms</a
+        >
+      </li>
+      <li
+        *ngIf="
+          this.openIdConnectService.userAvailable &&
+          this.openIdConnectService.user.profile.role == 'Student'
+        "
+      >
+        <a [routerLink]="['/profile']"
+          ><i class="fa fa-users fa-lg"></i>Profile</a
         >
       </li>
     </ul>
