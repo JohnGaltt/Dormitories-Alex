@@ -49,18 +49,21 @@ namespace Dormitories.Core.BusinessLogic.Managers
 
         public async Task<DormitoryViewModel> GetById(int id)
         {
-            return _mapper.Map<DormitoryViewModel>(await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Id == id));
+            var entity = await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Id == id);
+            var model = _mapper.Map<DormitoryViewModel>(entity);
+            return model;
         }
 
-        public async Task<DormitoryViewModel> GetByName(string name)
+        public async Task<Dormitory> GetByName(string name)
         {
-            return _mapper.Map<DormitoryViewModel>(await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Name == name));
+            var dormitory = await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Name == name);
+            return dormitory;
         }
 
         public async Task<DormitoryViewModel> Update(DormitoryViewModel updatedDormitory)
         {
             var existingDormitory = await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Id == updatedDormitory.Id) ?? throw new NotImplementedException();
-            _mapper.Map(existingDormitory, updatedDormitory);
+            _mapper.Map(updatedDormitory, existingDormitory);
             await _dbContext.SaveChangesAsync();
             return updatedDormitory;
         }

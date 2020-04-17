@@ -59,9 +59,9 @@
         <ng-template #popContent>
           <button
             [routerLink]="['/dormitory', dormitory.id, 'edit']"
-            class="btn btn-outline-secondary"
+            class="btn btn-outline-dark"
           >
-            Edit
+            <i class="fa fa-edit" aria-hidden="true"></i> Edit
           </button>
           <app-delete-button
             [elementId]="dormitory.id"
@@ -149,7 +149,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="OnClick()">
+    <button type="button" class="btn btn-primary" (click)="OnCreate()">
       Submit
     </button>
     <button

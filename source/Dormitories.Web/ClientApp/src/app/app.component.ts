@@ -8,6 +8,7 @@ import { OpenIdConnectService } from "./shared/open-id-connect.service";
 })
 export class AppComponent {
   constructor(private openIdConnectService: OpenIdConnectService) {
+    console.log(this.openIdConnectService);
   }
   title = "app";
 }

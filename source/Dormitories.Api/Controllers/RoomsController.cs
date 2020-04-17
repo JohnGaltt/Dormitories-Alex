@@ -1,4 +1,5 @@
 ﻿using Dormitories.Core.BusinessLogic.Managers;
+using Dormitories.Core.BusinessLogic.ViewModels;
 using Dormitories.Core.DataAccess;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace Dormitories.Api.Controllers
         public async Task<IActionResult> Get() => Ok(await _roomManager.Get());
 
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody]Room room) => Ok(await _roomManager.Create(room));
+        public async Task<IActionResult> Create([FromBody]RoomViewModel room) => Ok(await _roomManager.Create(room));
             
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id) => Ok(await _roomManager.GetById(id));

@@ -4,6 +4,7 @@ import { Dormitory } from "../models/dormitory";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DormitoryService } from "../services/dormitory-service";
 import { Subscription } from "rxjs";
+import { AppToastService } from "../shared/app-toast-service";
 
 @Component({
   templateUrl: "./dormitory-edit.component.html",
@@ -14,7 +15,8 @@ export class DormitoryEditComponent implements OnInit {
   constructor(
     private dormitoryService: DormitoryService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastService: AppToastService
   ) {}
   getDormitory(id: number): void {
     this.dormitoryService.getDormitory(id).subscribe(
@@ -26,10 +28,18 @@ export class DormitoryEditComponent implements OnInit {
     );
   }
 
+  showSuccess(message: string) {
+    this.toastService.show(message, {
+      classname: "bg-success text-light",
+      delay: 3000,
+    });
+  }
+
   onSubmit() {
     debugger;
     this.dormitoryService.updateDormitory(this.dormitory).subscribe(
       (result) => {
+        this.showSuccess("Гуртожиток змінено");
         this.router.navigateByUrl("/dormitory-list");
       },
       (error) => console.error(error)

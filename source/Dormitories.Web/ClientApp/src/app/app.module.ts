@@ -19,6 +19,7 @@ import { OpenIdConnectService } from "./shared/open-id-connect.service";
 import { RequireAuthenticatedUserRouteGuardService } from "./shared/require-authenticated-user-route-guard.service";
 import { AddAuthorizationHeaderInterceptor } from "./shared/add-authorization-header-interceptor";
 import { StudentProfileComponentComponent } from "./profile/student-profile-component/student-profile-component.component";
+import { AppToastsComponent } from "./app-toasts-component/app-toasts-component";
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { StudentProfileComponentComponent } from "./profile/student-profile-comp
     DormitoryEditComponent,
     SigninOidcComponent,
     StudentProfileComponentComponent,
+    AppToastsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),

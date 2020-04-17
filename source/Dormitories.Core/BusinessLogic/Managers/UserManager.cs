@@ -1,4 +1,5 @@
-﻿using Dormitories.Core.DataAccess;
+﻿using AutoMapper;
+using Dormitories.Core.DataAccess;
 using Dormitories.Core.DataAccess.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,9 +12,12 @@ namespace Dormitories.Core.BusinessLogic.Managers
     public class UserManager : IUserManager
     {
         private readonly ApplicationDbContext _dbContext;
-        public UserManager(ApplicationDbContext dbContext)
+        private readonly IMapper _mapper;
+
+        public UserManager(ApplicationDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public async Task<ApplicationUser> Create(ApplicationUser user)

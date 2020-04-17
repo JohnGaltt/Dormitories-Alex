@@ -1,4 +1,6 @@
-﻿using Dormitories.Core.DataAccess;
+﻿using AutoMapper;
+using Dormitories.Core.BusinessLogic.ViewModels;
+using Dormitories.Core.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,28 +12,32 @@ namespace Dormitories.Core.BusinessLogic.Managers
     public class RoomManager : IRoomManager
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public RoomManager(ApplicationDbContext dbContext)
+        public RoomManager(ApplicationDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
-        public async Task<Room> Create(Room room)
+        public async Task<RoomViewModel> Create(RoomViewModel roomDto)
         {
-            var oldRoom = await _dbContext.Rooms.FirstOrDefaultAsync(x => x.Id == room.Id);
+            var oldRoom = await _dbContext.Rooms.FirstOrDefaultAsync(x => x.Id == roomDto.Id);
             if (oldRoom != null)
             {
                 //conflict
                 throw new NotImplementedException();
             }
-            if (!await _dbContext.Dormitories.AnyAsync(x => x.Id == room.DormitoryId))
+            if (!await _dbContext.Dormitories.AnyAsync(x => x.Id == roomDto.DormitoryId))
             {
+                //no dormitory assigned
                 throw new NotImplementedException();
             }
+            var room = _mapper.Map<Room>(roomDto);
             await _dbContext.Rooms.AddAsync(room);
             await _dbContext.SaveChangesAsync();
 
-            return room;
+            return roomDto;
         }
 
         public async Task Delete(int id)
@@ -42,37 +48,31 @@ namespace Dormitories.Core.BusinessLogic.Managers
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Room>> Get()
+        public async Task<List<RoomViewModel>> Get()
         {
-            try
-            {
-                var rooms = await _dbContext.Rooms.Include(x => x.Dormitory).ToListAsync();
-                return rooms;
-            }
-            catch (Exception e)
-            {
-
-            }
-            return null;
+            var rooms = await _dbContext.Rooms.Include(x => x.Dormitory).ToListAsync();
+            var roomsDto = _mapper.Map<List<RoomViewModel>>(rooms);
+            return roomsDto;
         }
 
-        public async Task<List<Room>> GetByDormitoryId(int dormitoryId)
+        public async Task<List<RoomViewModel>> GetByDormitoryId(int dormitoryId)
         {
             var rooms = await _dbContext.Rooms.Include(x => x.Dormitory).Where(x => x.DormitoryId == dormitoryId).ToListAsync();
-            return rooms;
+            var roomsDto = _mapper.Map<List<RoomViewModel>>(rooms);
+            return roomsDto;
         }
 
-        public async Task<Room> GetById(int id)
+        public async Task<RoomViewModel> GetById(int id)
         {
-            return await _dbContext.Rooms.Include(x => x.Dormitory).FirstOrDefaultAsync(x => x.Id == id);
+            var room = await _dbContext.Rooms.Include(x => x.Dormitory).FirstOrDefaultAsync(x => x.Id == id);
+            var roomDto = _mapper.Map<RoomViewModel>(room);
+            return roomDto;
         }
 
-        public async Task<Room> Update(Room newRoom)
+        public async Task<RoomViewModel> Update(RoomViewModel newRoom)
         {
             var oldRoom = await _dbContext.Rooms.FirstOrDefaultAsync(x => x.Id == newRoom.Id) ?? throw new NotImplementedException();
-            oldRoom.Name = newRoom.Name;
-            oldRoom.Floor = newRoom.Floor;
-            oldRoom.DormitoryId = newRoom.DormitoryId;
+            _mapper.Map(oldRoom, newRoom);
             await _dbContext.SaveChangesAsync();
             return newRoom;
         }

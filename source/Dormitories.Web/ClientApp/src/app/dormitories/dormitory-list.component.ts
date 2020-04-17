@@ -5,8 +5,9 @@ import { Dormitory } from "../models/dormitory";
 import { DormitoryService } from "../services/dormitory-service";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
+import { AppToastService } from "../shared/app-toast-service";
 
-@Component({  
+@Component({
   selector: "dormitory-list",
   templateUrl: "./dormitory-list.component.html",
 })
@@ -39,16 +40,16 @@ export class DormitoryListComponent implements OnInit {
     private http: HttpClient,
     private modalService: NgbModal,
     private dormitoryService: DormitoryService,
-    private router: Router
+    private router: Router,
+    private toastService: AppToastService
   ) {}
 
-  OnClick() {
-    debugger;
+  OnCreate() {
     this.dormitoryService.createDormitory(this.dormitory).subscribe(
       (result) => {
-        console.log(result);
-        this.dormitories.push(result);
+        this.showSuccess("Гуртожиток створено");
         this.modalService.dismissAll();
+        this.getDormitories();
       },
       (error) => console.error(error)
     );
@@ -61,13 +62,8 @@ export class DormitoryListComponent implements OnInit {
   onRemoveElement(elementId: number): void {
     this.dormitoryService.deleteDormitory(elementId).subscribe(
       (result) => {
-        this.dormitoryService.getDormitories().subscribe({
-          next: (result) => {
-            this.dormitories = result;
-            this.filteredDormitories = this.dormitories;
-          },
-          error: (err) => (this.errorMessage = err),
-        });
+        this.getDormitories();
+        this.showSuccess("Гуртожиток видалено");
       },
       (error) => console.error(error)
     );
@@ -76,13 +72,8 @@ export class DormitoryListComponent implements OnInit {
   onEditElement(dormitory: Dormitory): void {
     this.dormitoryService.updateDormitory(dormitory).subscribe(
       (result) => {
-        this.dormitoryService.getDormitories().subscribe({
-          next: (result) => {
-            this.dormitories = result;
-            this.filteredDormitories = this.dormitories;
-          },
-          error: (err) => (this.errorMessage = err),
-        });
+        this.showSuccess("Гуртожиток змінено");
+        this.getDormitories();
       },
       (error) => console.error(error)
     );
@@ -99,6 +90,7 @@ export class DormitoryListComponent implements OnInit {
     debugger;
     this.dormitoryService.deleteDormitory(this.dormitory.id).subscribe(
       (result) => {
+        this.showSuccess("Гуртожиток був успішно видалений");
         this.router.navigate(["/dormitory-list"]);
       },
       (error) => console.error(error)
@@ -114,7 +106,14 @@ export class DormitoryListComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {
+  showSuccess(message: string) {
+    this.toastService.show(message, {
+      classname: "bg-success text-light",
+      delay: 3000,
+    });
+  }
+
+  getDormitories() {
     this.dormitoryService.getDormitories().subscribe({
       next: (result) => {
         this.dormitories = result;
@@ -122,5 +121,8 @@ export class DormitoryListComponent implements OnInit {
       },
       error: (err) => (this.errorMessage = err),
     });
+  }
+  ngOnInit(): void {
+    this.getDormitories();
   }
 }
