@@ -72,7 +72,7 @@ namespace Dormitories.Core.BusinessLogic.Managers
         public async Task<RoomViewModel> Update(RoomViewModel newRoom)
         {
             var oldRoom = await _dbContext.Rooms.FirstOrDefaultAsync(x => x.Id == newRoom.Id) ?? throw new NotImplementedException();
-            _mapper.Map(oldRoom, newRoom);
+            _mapper.Map(newRoom, oldRoom);
             await _dbContext.SaveChangesAsync();
             return newRoom;
         }

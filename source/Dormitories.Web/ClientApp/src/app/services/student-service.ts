@@ -37,10 +37,10 @@ export class UserService {
       );
   }
 
-  updateUser(User: User): Observable<User> {
+  updateUser(user: User): Observable<User> {
     const headers = new HttpHeaders({ "Content-Type": "application/json" });
     return this.http
-      .put<User>(`https://localhost:44372/users/${User.id}`, User, {
+      .put<User>(`https://localhost:44372/users/${user.id}`, user, {
         headers: headers,
       })
       .pipe(

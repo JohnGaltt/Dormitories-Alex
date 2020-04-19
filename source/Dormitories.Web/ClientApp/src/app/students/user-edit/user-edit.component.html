@@ -1,0 +1,157 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Edit User</h4>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="modal.dismiss('Cross click')"
+  >
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form novalidate (ngSubmit)="onSubmit(saveForm)" #saveForm="ngForm">
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="name">Name</label>
+        <input
+          type="text"
+          required
+          minlength="3"
+          class="form-control"
+          id="name"
+          [(ngModel)]="user.name"
+          placeholder="Name (required)"
+          name="name"
+          #nameVar="ngModel"
+          [ngClass]="{
+            'is-invalid': (nameVar.touched || nameVar.dirty) && !nameVar.valid
+          }"
+        />
+        <span class="invalid-feedback">
+          <span *ngIf="nameVar.errors?.required"
+            >Please enter name of the user</span
+          >
+          <span *ngIf="nameVar.errors?.minlength"
+            >The name must be longer than 3 characters</span
+          >
+        </span>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="address">Email</label>
+        <input
+          required
+          minlength="3"
+          type="text"
+          class="form-control"
+          id="email"
+          [(ngModel)]="user.email"
+          placeholder="Email (required)"
+          name="email"
+          #emailVar="ngModel"
+          [ngClass]="{
+            'is-invalid':
+              (emailVar.touched || emailVar.dirty) && !emailVar.valid
+          }"
+        />
+        <span class="invalid-feedback">
+          <span *ngIf="emailVar.errors?.required"
+            >Please enter email of the user</span
+          >
+          <span *ngIf="emailVar.errors?.minlength"
+            >The address must be longer than 3 characters</span
+          >
+        </span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div *ngIf="dormitories" class="form-group col-md-6">
+        <select
+          required
+          class="form-control"
+          id="dormitories"
+          name="dormitories"
+          #dormitoriesVar="ngModel"
+          [(ngModel)]="user.dormitoryId"
+          [ngClass]="{
+            'is-invalid':
+              (dormitoriesVar.touched || dormitoriesVar.dirty) &&
+              !dormitoriesVar.valid
+          }"
+          (ngModelChange)="onChange($event)"
+        >
+          <option value="0" disabled>Please select dormitory</option>
+          <option
+            *ngFor="let dormitory of dormitories"
+            [ngValue]="dormitory.id"
+          >
+            {{ dormitory.name }}
+          </option>
+        </select>
+        <span class="invalid-feedback">
+          <span *ngIf="dormitoriesVar.errors?.required"
+            >Please select dormitory</span
+          >
+        </span>
+      </div>
+      <div *ngIf="rooms" class="form-group col-md-6">
+        <select
+          required
+          class="form-control"
+          id="rooms"
+          name="rooms"
+          #roomsVar="ngModel"
+          [(ngModel)]="user.roomId"
+          [ngClass]="{
+            'is-invalid':
+              (roomsVar.touched || roomsVar.dirty) && !roomsVar.valid
+          }"
+        >
+          <option value="0" disabled>Please select room</option>
+          <option *ngFor="let room of rooms" [ngValue]="room.id">
+            {{ room.name }}
+          </option>
+        </select>
+        <span class="invalid-feedback">
+          <span *ngIf="roomsVar.errors?.required">Please select room</span>
+        </span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div *ngIf="roles" class="form-group col-md-6">
+        <select
+          required
+          class="form-control"
+          id="roles"
+          name="roles"
+          #rolesVar="ngModel"
+          [(ngModel)]="user.roleId"
+          [ngClass]="{
+            'is-invalid':
+              (rolesVar.touched || rolesVar.dirty) && !rolesVar.valid
+          }"
+        >
+          <option value="0" disabled>Please select roles</option>
+          <option *ngFor="let role of roles" [ngValue]="role.id">
+            {{ role.name }}
+          </option>
+        </select>
+        <span class="invalid-feedback">
+          <span *ngIf="rolesVar.errors?.required">Please select role</span>
+        </span>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="onSubmit()">
+    Submit
+  </button>
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    [routerLink]="['/student-list']"
+  >
+    Exit
+  </button>
+</div>

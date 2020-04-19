@@ -11,6 +11,7 @@ import { AppToastService } from "../shared/app-toast-service";
 })
 export class DormitoryEditComponent implements OnInit {
   private dormitory: Dormitory;
+
   private sub: Subscription;
   constructor(
     private dormitoryService: DormitoryService,

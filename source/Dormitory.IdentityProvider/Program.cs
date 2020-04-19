@@ -1,4 +1,5 @@
 using Dormitories.Core.DataAccess;
+using Dormitories.Core.DataAccess.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,18 +19,20 @@ namespace Dormitory.IdentityProvider
 
                 var oldUser = userManager.FindByNameAsync("alexandr").GetAwaiter().GetResult();
                 var oldStaffUser = userManager.FindByNameAsync("petro").GetAwaiter().GetResult();
+
                 if (oldUser == null)
                 {
-                    var user = new ApplicationUser("alexandr", 1,2);
+                    var user = new ApplicationUser("alexandr", 1, "alexandr@gmail.com",2);
 
                     userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
                 }
                 if (oldStaffUser == null)
                 {
-                    var user = new ApplicationUser("petro", 1, 2);
+                    var user = new ApplicationUser("petro", 1, "petro@gmail.com", 2);
 
                     userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
                 }
+
             }
 
             host.Run();

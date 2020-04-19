@@ -18,14 +18,17 @@
       type="search"
       placeholder="Search"
       aria-label="Search"
+      name="search"
+      [(ngModel)]="searchListFilter"
     />
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-      Search
-    </button>
   </form>
 </nav>
 
-<table class="table table-striped" aria-labelledby="tableLabel" *ngIf="users">
+<table
+  class="table table-striped"
+  aria-labelledby="tableLabel"
+  *ngIf="filteredUsers"
+>
   <thead>
     <tr>
       <th>Name</th>
@@ -39,8 +42,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{ user.userName }}</td>
+    <tr
+      *ngFor="
+        let user of filteredUsers
+          | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
+      "
+    >
+      <td>{{ user.name }}</td>
       <td>{{ user.email }}</td>
       <td>
         <i
@@ -50,6 +58,12 @@
         >
         </i>
         <ng-template #popContent>
+          <button
+            [routerLink]="['/user', user.id, 'edit']"
+            class="btn btn-outline-dark"
+          >
+            <i class="fa fa-edit" aria-hidden="true"></i> Edit
+          </button>
           <app-delete-button
             [elementId]="user.id"
             (removeClicked)="onRemoveElement($event)"
@@ -63,11 +77,16 @@
       <td>{{ user.roles }}</td>
     </tr>
   </tbody>
+  <ngb-pagination
+    [collectionSize]="filteredUsers.length"
+    [(page)]="page"
+    [maxSize]="5"
+  ></ngb-pagination>
 </table>
 
 <ng-template #mymodal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Bootstrap Modal</h4>
+    <h4 class="modal-title" id="modal-basic-title">Create User</h4>
     <button
       type="button"
       class="close"
@@ -131,6 +150,8 @@
             >
           </span>
         </div>
+      </div>
+      <div class="form-row">
         <div *ngIf="dormitories" class="form-group col-md-6">
           <select
             required
@@ -146,10 +167,10 @@
             }"
             (ngModelChange)="onChange($event)"
           >
+            <option value="0" disabled>Please select dormitory</option>
             <option
               *ngFor="let dormitory of dormitories"
               [ngValue]="dormitory.id"
-              [selected]="dormitories[0].id"
             >
               {{ dormitory.name }}
             </option>
@@ -173,16 +194,37 @@
                 (roomsVar.touched || roomsVar.dirty) && !roomsVar.valid
             }"
           >
-            <option
-              *ngFor="let room of rooms"
-              [ngValue]="room.id"
-              [selected]="rooms[0].id"
-            >
+            <option value="0" disabled>Please select room</option>
+            <option *ngFor="let room of rooms" [ngValue]="room.id">
               {{ room.name }}
             </option>
           </select>
           <span class="invalid-feedback">
             <span *ngIf="roomsVar.errors?.required">Please select room</span>
+          </span>
+        </div>
+      </div>
+      <div class="form-row">
+        <div *ngIf="roles" class="form-group col-md-6">
+          <select
+            required
+            class="form-control"
+            id="roles"
+            name="roles"
+            #rolesVar="ngModel"
+            [(ngModel)]="user.roleId"
+            [ngClass]="{
+              'is-invalid':
+                (rolesVar.touched || rolesVar.dirty) && !rolesVar.valid
+            }"
+          >
+            <option value="0" disabled>Please select roles</option>
+            <option *ngFor="let role of roles" [ngValue]="role.id">
+              {{ role.name }}
+            </option>
+          </select>
+          <span class="invalid-feedback">
+            <span *ngIf="rolesVar.errors?.required">Please select role</span>
           </span>
         </div>
       </div>

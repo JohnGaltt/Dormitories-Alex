@@ -22,12 +22,15 @@ namespace Dormitories.Api.Controllers
 
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody]RoomViewModel room) => Ok(await _roomManager.Create(room));
-            
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromQuery] int id, [FromBody]RoomViewModel room) => Ok(await _roomManager.Update(room));
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id) => Ok(await _roomManager.GetById(id));
         
         [HttpGet("availablerooms/{dormitoryId}")]
-        public async Task<IActionResult> GetByDormitoryIdId(int dormitoryId) => Ok(await _roomManager.GetByDormitoryId(dormitoryId));
+        public async Task<IActionResult> GetByDormitoryId(int dormitoryId) => Ok(await _roomManager.GetByDormitoryId(dormitoryId));
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

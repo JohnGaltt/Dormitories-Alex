@@ -8,10 +8,11 @@ namespace Dormitories.Core.DataAccess
 {
     public class ApplicationUser : IdentityUser<int>
     {
-        public ApplicationUser(string name, int dormitoryId, int? roomId = null)
+        public ApplicationUser(string name, int dormitoryId, string email, int? roomId = null)
         {
             Name = name;
             UserName = name;
+            Email = email;
             DormitoryId = dormitoryId;
             RoomId = roomId;
         }

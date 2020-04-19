@@ -18,14 +18,26 @@ namespace Dormitories.Core.DataAccess
                 .ForMember(x => x.DormitoryId, opt => opt.MapFrom(x => x.Dormitory.Id));
 
             CreateMap<RoomViewModel, Room>().ForMember(x => x.Id, y => y.Ignore())
-                .ForMember(x => x.Dormitory.Name, opt => opt.MapFrom(x => x.DormitoryName))
-                .ForMember(x => x.Dormitory.Address, opt => opt.MapFrom(x => x.DormitoryAddress))
-                .ForMember(x => x.Dormitory.Id, opt => opt.MapFrom(x => x.DormitoryId));
+                .ForPath(x => x.Dormitory.Name, opt => opt.MapFrom(x => x.DormitoryName))
+                .ForPath(x => x.Dormitory.Address, opt => opt.MapFrom(x => x.DormitoryAddress))
+                .ForMember(x => x.DormitoryId, opt => opt.MapFrom(x => x.DormitoryId))
+                .ForMember(x => x.Dormitory, opt => opt.Ignore());
 
-            CreateMap<Dormitory, Room>().ForMember(x => x.Id, y => y.Ignore())
-                .ForMember(x => x.Dormitory.Name, opt => opt.MapFrom(x => x.Name))
-                .ForMember(x => x.Dormitory.Address, opt => opt.MapFrom(x => x.Address))
-                .ForMember(x => x.DormitoryId, opt => opt.MapFrom(x => x.Id));
+            CreateMap<UpdateUserViewModel, ApplicationUser>()
+                .ForMember(x => x.Id, y => y.Ignore())
+                .ForMember(x => x.Name, opt => opt.MapFrom(x => x.Name))
+                .ForMember(x => x.Email, opt => opt.MapFrom(x => x.Email))
+                .ForMember(x => x.DormitoryId, opt => opt.MapFrom(x => x.DormitoryId))
+                .ForMember(x => x.RoomId, opt => opt.MapFrom(x => x.RoomId))
+                .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Name));
+
+            CreateMap<ApplicationUser, UserViewModel>()
+                .ForMember(x => x.Id, opt => opt.MapFrom(x=>x.Id))
+                .ForMember(x => x.Name, opt => opt.MapFrom(x => x.Name))
+                .ForMember(x => x.Email, opt => opt.MapFrom(x => x.Email))
+                .ForMember(x => x.DormitoryId, opt => opt.MapFrom(x => x.DormitoryId))
+                .ForMember(x => x.RoomId, opt => opt.MapFrom(x => x.RoomId))
+                .ForMember(x => x.RoleId, opt => opt.Ignore());
         }   
     }
 }

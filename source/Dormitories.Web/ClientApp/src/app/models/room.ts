@@ -2,6 +2,7 @@ export interface Room {
   id: number;
   name: string;
   floor: string;
-  dormitory?: string;
+  dormitoryName?: string;
+  dormitoryAddress?: string;
   dormitoryId?: number;
 }

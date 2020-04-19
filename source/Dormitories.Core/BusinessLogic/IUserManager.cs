@@ -1,4 +1,5 @@
-﻿using Dormitories.Core.DataAccess;
+﻿using Dormitories.Core.BusinessLogic.ViewModels;
+using Dormitories.Core.DataAccess;
 using Dormitories.Core.DataAccess.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,10 +8,11 @@ namespace Dormitories.Core.BusinessLogic.Managers
 {
     public interface IUserManager
     {
-        Task<ApplicationUser> Create(ApplicationUser student);
+        Task<CreateUserViewModel> Create(CreateUserViewModel student);
         Task<List<AccountViewModel>> Get();
-        Task<ApplicationUser> GetById(int id);
-        Task<ApplicationUser> Update(ApplicationUser newStudent);
+        Task<UserViewModel> GetById(int id);
+        Task<ApplicationUser> GetEntityById(int id);
+        Task<UpdateUserViewModel> Update(UpdateUserViewModel newStudent);
         Task Delete(int id);
     }
 }

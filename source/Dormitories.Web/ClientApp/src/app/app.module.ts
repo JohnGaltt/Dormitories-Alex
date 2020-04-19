@@ -20,6 +20,8 @@ import { RequireAuthenticatedUserRouteGuardService } from "./shared/require-auth
 import { AddAuthorizationHeaderInterceptor } from "./shared/add-authorization-header-interceptor";
 import { StudentProfileComponentComponent } from "./profile/student-profile-component/student-profile-component.component";
 import { AppToastsComponent } from "./app-toasts-component/app-toasts-component";
+import { RoomEditComponent } from "./rooms/room-edit/room-edit.component";
+import { UserEditComponent } from "./students/user-edit/user-edit.component";
 
 @NgModule({
   declarations: [
@@ -35,6 +37,8 @@ import { AppToastsComponent } from "./app-toasts-component/app-toasts-component"
     SigninOidcComponent,
     StudentProfileComponentComponent,
     AppToastsComponent,
+    RoomEditComponent,
+    UserEditComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -66,6 +70,16 @@ import { AppToastsComponent } from "./app-toasts-component/app-toasts-component"
       {
         path: "dormitory/:id/edit",
         component: DormitoryEditComponent,
+        canActivate: [RequireAuthenticatedUserRouteGuardService],
+      },
+      {
+        path: "room/:id/edit",
+        component: RoomEditComponent,
+        canActivate: [RequireAuthenticatedUserRouteGuardService],
+      },
+      {
+        path: "user/:id/edit",
+        component: UserEditComponent,
         canActivate: [RequireAuthenticatedUserRouteGuardService],
       },
       {

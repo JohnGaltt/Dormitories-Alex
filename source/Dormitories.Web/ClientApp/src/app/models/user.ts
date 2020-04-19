@@ -8,4 +8,5 @@ export interface User {
   dormitoryAddress: string;
   dormitoryId?: number;
   roomId?: number;
+  roleId?: number;
 }

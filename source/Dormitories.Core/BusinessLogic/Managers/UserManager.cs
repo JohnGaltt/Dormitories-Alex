@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Dormitories.Core.BusinessLogic.ViewModels;
 using Dormitories.Core.DataAccess;
 using Dormitories.Core.DataAccess.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ namespace Dormitories.Core.BusinessLogic.Managers
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
+        
 
         public UserManager(ApplicationDbContext dbContext, IMapper mapper)
         {
@@ -20,12 +23,13 @@ namespace Dormitories.Core.BusinessLogic.Managers
             _mapper = mapper;
         }
 
-        public async Task<ApplicationUser> Create(ApplicationUser user)
+        public async Task<CreateUserViewModel> Create(CreateUserViewModel user)
         {
-            if (await _dbContext.Users.AnyAsync(x => x.Id == user.Id))
+            if (await _dbContext.Users.AnyAsync(x => x.Name == user.Name))
             {
                 throw new NotImplementedException();
             }
+            var entity = _mapper.Map<ApplicationUser>(user);
             await _dbContext.AddAsync(user);
             await _dbContext.SaveChangesAsync();
             return user;
@@ -33,7 +37,6 @@ namespace Dormitories.Core.BusinessLogic.Managers
 
         public async Task<List<AccountViewModel>> Get()
         {
-
             var userList = await (from user in _dbContext.Users.Include(x=>x.Dormitory).Include(x=>x.Room).Include(x=>x.UserRoles).ThenInclude(x=>x.Role)
                                   select new
                                   {
@@ -67,24 +70,37 @@ namespace Dormitories.Core.BusinessLogic.Managers
 
             return userListVm;
         }
-        public async Task<ApplicationUser> GetById(int id)
+
+        public async Task<UserViewModel> GetById(int id)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotImplementedException();
-            return user;
+            var user = await _dbContext.Users.Include(x=>x.UserRoles).ThenInclude(x=>x.Role).FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotImplementedException();
+            var userDto = _mapper.Map<UserViewModel>(user);
+
+            userDto.RoleId = user.UserRoles.Select(x=>x.RoleId).FirstOrDefault();
+            return userDto;
         }
-        public async Task<ApplicationUser> Update(ApplicationUser newuser)
+        public async Task<UpdateUserViewModel> Update(UpdateUserViewModel newuser)
         {
-            var olduser = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == newuser.Id) ?? throw new NotImplementedException();
-            olduser.Name = newuser.Name;
-            olduser.Email = newuser.Email;
+            var olduser = await _dbContext.Users.FirstOrDefaultAsync(x => x.Name == newuser.Name) ?? throw new NotImplementedException();
+
+            _mapper.Map(newuser, olduser);
+
             await _dbContext.SaveChangesAsync();
             return newuser;
         }
+
         public async Task Delete(int id)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotImplementedException();
+
             _dbContext.Users.Remove(user);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<ApplicationUser> GetEntityById(int id)
+        {
+            var user = await _dbContext.Users.Include(x => x.UserRoles).ThenInclude(x => x.Role).FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotImplementedException();
+            return user;
         }
     }
 }

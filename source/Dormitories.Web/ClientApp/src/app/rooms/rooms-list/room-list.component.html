@@ -16,16 +16,19 @@
     <input
       class="form-control mr-sm-2"
       type="search"
-      placeholder="Search"
+      placeholder="Type for search"
       aria-label="Search"
+      [(ngModel)]="searchListFilter"
+      name="search"
     />
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-      Search
-    </button>
   </form>
 </nav>
 
-<table class="table table-striped" aria-labelledby="tableLabel" *ngIf="rooms">
+<table
+  class="table table-striped"
+  aria-labelledby="tableLabel"
+  *ngIf="filteredRooms"
+>
   <thead>
     <tr>
       <th>Name</th>
@@ -36,14 +39,43 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let room of rooms">
+    <tr
+      *ngFor="
+        let room of filteredRooms
+          | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
+      "
+    >
       <td>{{ room.name }}</td>
       <td>{{ room.floor }}</td>
-      <td><i class="fa fa-ellipsis-v fa-sm" aria-hidden="true"></i></td>
-      <td>{{ room.dormitory.name }}</td>
-      <td>{{ room.dormitory.address }}</td>
+      <td>
+        <i
+          [ngbPopover]="popContent"
+          class="fa fa-ellipsis-v fa-sm"
+          aria-hidden="true"
+        >
+        </i>
+        <ng-template #popContent>
+          <button
+            [routerLink]="['/room', room.id, 'edit']"
+            class="btn btn-outline-dark"
+          >
+            <i class="fa fa-edit" aria-hidden="true"></i> Edit
+          </button>
+          <app-delete-button
+            [elementId]="room.id"
+            (removeClicked)="onRemoveElement($event)"
+          ></app-delete-button>
+        </ng-template>
+      </td>
+      <td>{{ room.dormitoryName }}</td>
+      <td>{{ room.dormitoryAddress }}</td>
     </tr>
   </tbody>
+  <ngb-pagination
+    [collectionSize]="filteredRooms.length"
+    [(page)]="page"
+    [maxSize]="5"
+  ></ngb-pagination>
 </table>
 <ng-template #mymodal let-modal>
   <div class="modal-header">
@@ -142,7 +174,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="onSubmit()">
+    <button type="button" class="btn btn-primary" (click)="create()">
       Submit
     </button>
     <button
