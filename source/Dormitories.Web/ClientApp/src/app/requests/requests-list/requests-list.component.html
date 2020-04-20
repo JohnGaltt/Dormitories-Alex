@@ -1,0 +1,49 @@
+<nav class="navbar navbar-light bg-light justify-content-between">
+  <form class="form-inline">
+    <input
+      class="form-control mr-sm-2"
+      type="search"
+      placeholder="Type for search"
+      aria-label="Search"
+      [(ngModel)]="searchListFilter"
+      name="search"
+    />
+  </form>
+</nav>
+
+<table
+  class="table table-striped"
+  aria-labelledby="tableLabel"
+  *ngIf="filteredRequests"
+>
+  <thead>
+    <tr>
+      <th>User Name</th>
+      <th>User Email</th>
+      <th>Request Type</th>
+      <th>Reason</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="
+        let request of filteredRequests
+          | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
+      "
+    >
+      <td>
+        {{ request.userName }}
+      </td>
+      <td>
+        {{ request.userEmail }}
+      </td>
+      <td>{{ request.requestType }}</td>
+      <td>{{ request.reason }}</td>
+    </tr>
+  </tbody>
+  <ngb-pagination
+    [collectionSize]="filteredRequests.length"
+    [(page)]="page"
+    [maxSize]="5"
+  ></ngb-pagination>
+</table>

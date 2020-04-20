@@ -116,7 +116,9 @@ namespace Dormitories.Core.BusinessLogic.Managers
                 RoomFloor = user.Room.Floor,
                 RoomName = user.Room.Name,
                 UserId = user.Id,
-                ExpireAt = user.ExpireAt
+                ExpireAt = user.ExpireAt,
+                RoomId = user.RoomId.HasValue ? user.RoomId.Value : 0,
+                DormitoryId = user.DormitoryId,
             };
 
             return userDto;

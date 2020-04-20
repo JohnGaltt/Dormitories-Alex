@@ -11,6 +11,7 @@ namespace Dormitories.Core.DataAccess
     {
         public DbSet<Dormitory> Dormitories { get; set; }
         public DbSet<Room> Rooms { get; set; }
+        public DbSet<Request> Requests { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
        : base(options)
@@ -24,7 +25,7 @@ namespace Dormitories.Core.DataAccess
             Room.Build(modelBuilder);
             Dormitory.Build(modelBuilder);
             ApplicationUserRole.Build(modelBuilder);
-
+            Request.Build(modelBuilder);
         }
 
 

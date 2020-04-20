@@ -13,8 +13,16 @@
           {{ user.dormitoryAddress }}
         </p>
         <ul>
-          <li>Змінити гуртожиток</li>
-          <li>Повідомити про стан гуртожитка</li>
+          <li>
+            <a [routerLink]="" (click)="open(mymodal)">
+              Змінити гуртожиток
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="" (click)="openState(mymodal2)"
+              >Повідомити про стан гуртожитка</a
+            >
+          </li>
           <li>
             Карта гуртожитків
             <ks-modal-gallery
@@ -38,13 +46,21 @@
           {{ user.roomFloor }} поверсі
         </p>
         <ul>
-          <li>Змінити кімнату</li>
+          <li>
+            <a [routerLink]="" (click)="openRoomModal(mymodal3)"
+              >Змінити кімнату</a
+            >
+          </li>
           <li>
             <a [routerLink]="['/roommates-list']"
               >Переглянути список людей у кімнаті</a
             >
           </li>
-          <li>Повідомити про стан кімнати</li>
+          <li>
+            <a [routerLink]="" (click)="openState(mymodal4)"
+              >Повідомити про стан кімнати</a
+            >
+          </li>
         </ul>
       </div>
     </div>
@@ -74,3 +90,271 @@
     </div>
   </div>
 </div>
+
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Змінити гуртожиток</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form novalidate #saveForm="ngForm">
+      <div class="form-row">
+        <label for="dormitories">
+          Ваш гуртожиток - {{ user.dormitoryName }}. Оберіть гуртожиток, на який
+          ви хочете змінити зі списку:
+        </label>
+      </div>
+      <div class="form-row">
+        <div *ngIf="dormitories" class="form-group col-md-12">
+          <select
+            required
+            class="form-control"
+            id="dormitories"
+            name="dormitories"
+            #dormitoriesVar="ngModel"
+            [(ngModel)]="request.itemId"
+            [ngClass]="{
+              'is-invalid':
+                (dormitoriesVar.touched || dormitoriesVar.dirty) &&
+                !dormitoriesVar.valid
+            }"
+          >
+            <option value="0" disabled>Please select dormitory</option>
+            <option
+              *ngFor="let dormitory of dormitories"
+              [ngValue]="dormitory.id"
+            >
+              {{ dormitory.name }}
+            </option>
+          </select>
+          <span class="invalid-feedback">
+            <span *ngIf="dormitoriesVar.errors?.required"
+              >Please select dormitory</span
+            >
+          </span>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="exampleFormControlTextarea1">Вкажіть причину зміни</label>
+          <textarea
+            class="form-control"
+            id="exampleFormControlTextarea1"
+            rows="3"
+            [(ngModel)]="request.reason"
+            name="reason"
+          ></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="onSubmitRequest(RequestTypes.ChangeDormitory)"
+    >
+      Submit
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="modal.close('Save click')"
+    >
+      Exit
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #mymodal2 let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      Повідомити про стан гуртожитка
+    </h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form novalidate #saveForm="ngForm">
+      <div class="form-row">
+        <label> Ваш гуртожиток - {{ user.dormitoryName }} </label>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="exampleFormControlTextarea2"
+            >Повідомте про стан гуртожитка</label
+          >
+          <textarea
+            class="form-control"
+            id="exampleFormControlTextarea2"
+            rows="3"
+            [(ngModel)]="request.reason"
+            name="statereason"
+          ></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="onSubmitRequest(RequestTypes.DormitoryComplain)"
+    >
+      Submit
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="modal.close('Save click')"
+    >
+      Exit
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #mymodal3 let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Змінити кімнату</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form novalidate #saveForm="ngForm">
+      <div class="form-row">
+        <label for="dormitories">
+          Ваш гуртожиток - {{ user.dormitoryName }}. Ваша кімната
+          {{ user.roomName }} Оберіть кімнату, на яку ви хочете змінити зі
+          списку:
+        </label>
+      </div>
+      <div class="form-row">
+        <div *ngIf="rooms" class="form-group col-md-12">
+          <select
+            required
+            class="form-control"
+            id="rooms"
+            name="rooms"
+            #roomsVar="ngModel"
+            [(ngModel)]="request.itemId"
+            [ngClass]="{
+              'is-invalid':
+                (roomsVar.touched || roomsVar.dirty) && !roomsVar.valid
+            }"
+          >
+            <option value="0" disabled>Please select room</option>
+            <option *ngFor="let room of rooms" [ngValue]="room.id">
+              {{ room.name }}
+            </option>
+          </select>
+          <span class="invalid-feedback">
+            <span *ngIf="roomsVar.errors?.required">Please select room</span>
+          </span>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="exampleFormControlTextarea3">Вкажіть причину зміни</label>
+          <textarea
+            class="form-control"
+            id="exampleFormControlTextarea3"
+            rows="3"
+            name="roomstate"
+            [(ngModel)]="request.reason"
+          ></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="onSubmitRequest(RequestTypes.ChangeRoom)"
+    >
+      Submit
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="modal.close('Save click')"
+    >
+      Exit
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #mymodal4 let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      Повідомити про стан кімнати
+    </h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form novalidate #saveForm="ngForm">
+      <div class="form-row">
+        <label>
+          Ваш гуртожиток - {{ user.dormitoryName }}. Ваша кімната
+          {{ user.roomName }}
+        </label>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="exampleFormControlTextarea4"
+            >Повідомте про стан кімнати</label
+          >
+          <textarea
+            class="form-control"
+            id="exampleFormControlTextarea4"
+            rows="3"
+            [(ngModel)]="request.reason"
+            name="roomcomplain"
+          ></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="onSubmitRequest(RequestTypes.RoomComplain)"
+    >
+      Submit
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="modal.close('Save click')"
+    >
+      Exit
+    </button>
+  </div>
+</ng-template>

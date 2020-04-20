@@ -24,5 +24,11 @@ namespace Dormitories.Core.BusinessLogic.ViewModels
 
         [JsonProperty("dormitoryName")]
         public string DormitoryName { get; set; }
+
+        [JsonProperty("dormitoryId")]
+        public int DormitoryId { get; set; }
+
+        [JsonProperty("roomId")]
+        public int RoomId { get; set; }
     }
 }

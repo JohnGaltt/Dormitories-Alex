@@ -4,6 +4,13 @@ import { OpenIdConnectService } from "src/app/shared/open-id-connect.service";
 import { User, PartialUpdateUser } from "src/app/models/user";
 import { AppToastService } from "src/app/shared/app-toast-service";
 import { Image } from "@ks89/angular-modal-gallery";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { DormitoryService } from "src/app/services/dormitory-service";
+import { Dormitory } from "src/app/models/dormitory";
+import { RoomService } from "src/app/services/room-service";
+import { Room } from "src/app/models/room";
+import { StudentRequest, RequestTypes } from "src/app/models/request";
+import { RequestService } from "src/app/services/request.service";
 
 @Component({
   selector: "app-student-profile-component",
@@ -14,12 +21,22 @@ export class StudentProfileComponentComponent implements OnInit {
   constructor(
     private userService: UserService,
     private openIdConnectService: OpenIdConnectService,
-    private toastService: AppToastService
+    private toastService: AppToastService,
+    private modalService: NgbModal,
+    private dormitoryService: DormitoryService,
+    private roomService: RoomService,
+    private requestService: RequestService
   ) {}
 
   public updateUser: PartialUpdateUser = {
     id: 0,
   };
+  request: StudentRequest = {
+    id: 0,
+    userId: 0,
+    reason: "",
+  };
+  RequestTypes = RequestTypes;
   images: Image[] = [
     new Image(0, {
       // modal
@@ -35,6 +52,8 @@ export class StudentProfileComponentComponent implements OnInit {
     }),
     //
   ];
+  public dormitories: Dormitory[];
+  public rooms: Room[];
   public user: User = {
     id: 0,
     name: "",
@@ -66,6 +85,57 @@ export class StudentProfileComponentComponent implements OnInit {
     });
   }
 
+  openState(content) {
+    this.modalService
+      .open(content, { ariaLabelledBy: "modal-basic-title" })
+      .result.then((result) => {
+        console.log(result);
+      });
+  }
+
+  openRoomModal(content) {
+    this.roomService.getRoomsByDormitoryId(this.user.dormitoryId).subscribe(
+      (result) => {
+        this.rooms = result;
+        this.modalService
+          .open(content, { ariaLabelledBy: "modal-basic-title" })
+          .result.then((result) => {
+            console.log(result);
+          });
+      },
+      (error) => console.error(error)
+    );
+  }
+
+  onSubmitRequest(type: RequestTypes) {
+    this.request.requestType = type;
+    this.request.userId = this.user.id;
+    this.requestService.createRequest(this.request).subscribe(
+      (result) => {
+        console.log(result);
+        this.showSuccess("Заявку створено, дякуємо!");
+        this.modalService.dismissAll();
+        this.request.itemId = null;
+        this.request.reason = "";
+        this.request.requestType = null;
+      },
+      (error) => console.error(error)
+    );
+  }
+
+  open(content) {
+    this.dormitoryService.getDormitories().subscribe(
+      (result) => {
+        this.dormitories = result;
+        this.modalService
+          .open(content, { ariaLabelledBy: "modal-basic-title" })
+          .result.then((result) => {
+            console.log(result);
+          });
+      },
+      (error) => console.error(error)
+    );
+  }
   getUserWithNames(id: number): void {
     this.userService.getUserWithNames(id).subscribe(
       (result) => {

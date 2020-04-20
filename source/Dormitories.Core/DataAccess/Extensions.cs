@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Dormitories.Core.BusinessLogic;
 using Dormitories.Core.BusinessLogic.Managers;
 using Dormitories.Core.DataAccess.Models;
 using Dormitories.Core.DataAccess.Settings;
@@ -38,6 +39,7 @@ namespace Dormitories.Core.DataAccess
             services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddTransient<IUserManager, UserManager>();
+            services.AddTransient<IRequestManager, RequestManager>();
             services.AddTransient<IRoomManager, RoomManager>();
             services.AddTransient<IDormitoryManager, DormitoryManager>();
 

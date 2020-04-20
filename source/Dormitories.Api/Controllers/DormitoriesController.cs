@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Dormitories.Api.Controllers
 {
-    [Authorize(Roles = "Staff")]
+    [Authorize(Roles = "Staff, Student")]
     [Route("dormitories")]
     public class DormitoriesController : ControllerBase
     {
@@ -17,9 +17,11 @@ namespace Dormitories.Api.Controllers
             _dormitoryManager = dormitoryManager;
         }
 
+        [Authorize(Roles = "Staff, Student")]
         [HttpGet]
         public async Task<IActionResult> Get() => Ok(await _dormitoryManager.Get());
 
+        [Authorize(Roles = "Staff")]
         [Route("create")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]DormitoryViewModel dormitory)
@@ -28,6 +30,7 @@ namespace Dormitories.Api.Controllers
             return Ok(dormitory);
          }
 
+        [Authorize(Roles = "Staff")]
         [Route("{id}")]
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
@@ -36,6 +39,7 @@ namespace Dormitories.Api.Controllers
             return Ok(dormitory);
         }
 
+        [Authorize(Roles = "Staff")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -43,6 +47,8 @@ namespace Dormitories.Api.Controllers
             return Ok();
         }
 
+
+        [Authorize(Roles = "Staff")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit([FromQuery]int id, [FromBody]DormitoryViewModel dormitory)
         {

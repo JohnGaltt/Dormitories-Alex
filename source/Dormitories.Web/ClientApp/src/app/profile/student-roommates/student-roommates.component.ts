@@ -2,6 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { User } from "src/app/models/user";
 import { UserService } from "src/app/services/student-service";
 import { OpenIdConnectService } from "src/app/shared/open-id-connect.service";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { DormitoryService } from "src/app/services/dormitory-service";
+import { Dormitory } from "src/app/models/dormitory";
 
 @Component({
   selector: "app-student-roommates",
@@ -11,11 +14,14 @@ import { OpenIdConnectService } from "src/app/shared/open-id-connect.service";
 export class StudentRoommatesComponent implements OnInit {
   constructor(
     private userService: UserService,
-    private openIdConnectService: OpenIdConnectService
+    private openIdConnectService: OpenIdConnectService,
+    private modalService: NgbModal,
+    private dormitoryService: DormitoryService
   ) {}
   page = 1;
   pageSize = 10;
   roommates: User[];
+  dormitories: Dormitory[];
   filteredRoommates: User[];
 
   private _searchListFilter: string;

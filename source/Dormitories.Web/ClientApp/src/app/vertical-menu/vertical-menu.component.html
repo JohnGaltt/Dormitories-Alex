@@ -3,7 +3,7 @@
   <nav id="sidebar">
     <ul class="list-unstyled components">
       <li>
-        <a><i class="fa fa-home fa-lg"></i> Home</a>
+        <a [routerLink]="['']"><i class="fa fa-home fa-lg"></i> Home</a>
       </li>
       <li
         *ngIf="
@@ -54,6 +54,16 @@
       >
         <a [routerLink]="['/roommates-list']"
           ><i class="fa fa-users fa-lg"></i>My Roommates</a
+        >
+      </li>
+      <li
+        *ngIf="
+          this.openIdConnectService.userAvailable &&
+          this.openIdConnectService.user.profile.role == 'Staff'
+        "
+      >
+        <a [routerLink]="['/app-requests-list']"
+          ><i class="fa fa-users fa-lg"></i>Students Requests</a
         >
       </li>
     </ul>
