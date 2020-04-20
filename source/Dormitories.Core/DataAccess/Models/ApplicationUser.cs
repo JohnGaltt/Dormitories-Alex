@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 
 namespace Dormitories.Core.DataAccess
@@ -22,6 +23,7 @@ namespace Dormitories.Core.DataAccess
         public int DormitoryId { get; set; }
         public Room Room { get; set; }
         public int? RoomId { get; set; }
+        public DateTime? ExpireAt { get; set; }
         public ICollection<ApplicationUserRole> UserRoles { get; set; }
 
 

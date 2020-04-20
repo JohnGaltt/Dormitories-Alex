@@ -9,4 +9,10 @@ export interface User {
   dormitoryId?: number;
   roomId?: number;
   roleId?: number;
+  expireAt?: Date;
+}
+
+export interface PartialUpdateUser {
+  id: number;
+  expireAt?: Date;
 }

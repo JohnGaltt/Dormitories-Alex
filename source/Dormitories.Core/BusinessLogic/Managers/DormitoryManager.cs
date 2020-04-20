@@ -31,6 +31,8 @@ namespace Dormitories.Core.BusinessLogic.Managers
             await _dbContext.AddAsync(newDormitory);
             await _dbContext.SaveChangesAsync();
 
+            newDormitoryDto.Id = newDormitory.Id;
+
             return newDormitoryDto;
         }
 
@@ -54,10 +56,11 @@ namespace Dormitories.Core.BusinessLogic.Managers
             return model;
         }
 
-        public async Task<Dormitory> GetByName(string name)
+        public async Task<DormitoryViewModel> GetByName(string name)
         {
             var dormitory = await _dbContext.Dormitories.FirstOrDefaultAsync(x => x.Name == name);
-            return dormitory;
+            var viewModel = _mapper.Map<DormitoryViewModel>(dormitory);
+            return viewModel;
         }
 
         public async Task<DormitoryViewModel> Update(DormitoryViewModel updatedDormitory)

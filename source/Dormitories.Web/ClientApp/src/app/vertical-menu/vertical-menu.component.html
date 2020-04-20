@@ -46,6 +46,16 @@
           ><i class="fa fa-users fa-lg"></i>Profile</a
         >
       </li>
+      <li
+        *ngIf="
+          this.openIdConnectService.userAvailable &&
+          this.openIdConnectService.user.profile.role == 'Student'
+        "
+      >
+        <a [routerLink]="['/roommates-list']"
+          ><i class="fa fa-users fa-lg"></i>My Roommates</a
+        >
+      </li>
     </ul>
   </nav>
 </div>

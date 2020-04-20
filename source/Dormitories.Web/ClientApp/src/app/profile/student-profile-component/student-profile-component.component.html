@@ -9,13 +9,20 @@
       <div class="card-body">
         <h5 class="card-title">Гуртожиток</h5>
         <p class="card-text">
-          Ви проживаєте у гуртожитку №1, за адресою вул Лукаша 5 Змінити
-          гуртожиток, повідомити про стан гуртожитка, відкрити карту, загальна
-          інформація
+          Ви проживаєте у гуртожитку {{ user.dormitoryName }}, за адресою вул.
+          {{ user.dormitoryAddress }}
         </p>
-        <p class="card-text">
-          <small class="text-muted">Last updated 3 mins ago</small>
-        </p>
+        <ul>
+          <li>Змінити гуртожиток</li>
+          <li>Повідомити про стан гуртожитка</li>
+          <li>
+            Карта гуртожитків
+            <ks-modal-gallery
+              [id]="1"
+              [modalImages]="images"
+            ></ks-modal-gallery>
+          </li>
+        </ul>
       </div>
     </div>
     <div class="card">
@@ -27,12 +34,18 @@
       <div class="card-body">
         <h5 class="card-title">Кімната</h5>
         <p class="card-text">
-          Переглянути список людей у кімнаті, повідомити про стан кімнати,
-          загальна інформація
+          Ви проживаєте у кімнаті {{ user.roomName }}, на
+          {{ user.roomFloor }} поверсі
         </p>
-        <p class="card-text">
-          <small class="text-muted">Last updated 3 mins ago</small>
-        </p>
+        <ul>
+          <li>Змінити кімнату</li>
+          <li>
+            <a [routerLink]="['/roommates-list']"
+              >Переглянути список людей у кімнаті</a
+            >
+          </li>
+          <li>Повідомити про стан кімнати</li>
+        </ul>
       </div>
     </div>
     <div class="card">
@@ -44,11 +57,19 @@
       <div class="card-body">
         <h5 class="card-title">Профіль</h5>
         <p class="card-text">
-          Інформація про студента - ПІБ, проживання оплачене до 15.07.2020
+          Студент {{ user.name }}. Поштова скринька {{ user.email }},
         </p>
-        <p class="card-text">
-          <small class="text-muted">Last updated 3 mins ago</small>
+        <p *ngIf="user.expireAt">
+          Проживання оплачене до {{ user.expireAt | date: "shortDate" }}
         </p>
+        <div *ngIf="!user.expireAt">
+          <p>
+            Проживання не оплачене! Потрібно оплатити до 20.05.2020
+          </p>
+          <button (click)="updatePayment()" class="btn btn-primary">
+            Оплатити
+          </button>
+        </div>
       </div>
     </div>
   </div>

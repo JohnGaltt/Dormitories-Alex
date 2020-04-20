@@ -8,7 +8,7 @@ import {
 import { Dormitory } from "../models/dormitory";
 import { Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
-import { User } from "../models/user";
+import { User, PartialUpdateUser } from "../models/user";
 @Injectable({
   providedIn: "root",
 })
@@ -21,11 +21,29 @@ export class UserService {
     );
   }
 
+  getRoommates(id: number): Observable<User[]> {
+    return this.http
+      .get<User[]>(`https://localhost:44372/users/roommates/${id}`)
+      .pipe(
+        tap((data) => console.log("All: " + JSON.stringify(data))),
+        catchError(this.handleError)
+      );
+  }
+
   getUser(id: number): Observable<User> {
     return this.http.get<User>(`https://localhost:44372/users/${id}`).pipe(
       tap((data) => console.log("All: " + JSON.stringify(data))),
       catchError(this.handleError)
     );
+  }
+
+  getUserWithNames(id: number): Observable<User> {
+    return this.http
+      .get<User>(`https://localhost:44372/users/names/${id}`)
+      .pipe(
+        tap((data) => console.log("All: " + JSON.stringify(data))),
+        catchError(this.handleError)
+      );
   }
 
   createUser(User: User): Observable<User> {
@@ -41,6 +59,18 @@ export class UserService {
     const headers = new HttpHeaders({ "Content-Type": "application/json" });
     return this.http
       .put<User>(`https://localhost:44372/users/${user.id}`, user, {
+        headers: headers,
+      })
+      .pipe(
+        tap((data) => console.log("All: " + JSON.stringify(data))),
+        catchError(this.handleError)
+      );
+  }
+
+  partialUpdate(user: PartialUpdateUser): Observable<PartialUpdateUser> {
+    const headers = new HttpHeaders({ "Content-Type": "application/json" });
+    return this.http
+      .patch<PartialUpdateUser>(`https://localhost:44372/users`, user, {
         headers: headers,
       })
       .pipe(

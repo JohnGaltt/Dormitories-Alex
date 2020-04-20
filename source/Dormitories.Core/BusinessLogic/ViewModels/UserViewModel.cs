@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace Dormitories.Core.BusinessLogic.ViewModels
 {
@@ -21,5 +22,8 @@ namespace Dormitories.Core.BusinessLogic.ViewModels
 
         [JsonProperty("roleId")]
         public int RoleId { get; set; }
+
+        [JsonProperty("expireAt")]
+        public DateTime? ExpireAt { get; set; }
     }
 }

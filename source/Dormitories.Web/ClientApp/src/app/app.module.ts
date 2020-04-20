@@ -23,6 +23,11 @@ import { AppToastsComponent } from "./app-toasts-component/app-toasts-component"
 import { RoomEditComponent } from "./rooms/room-edit/room-edit.component";
 import { UserEditComponent } from "./students/user-edit/user-edit.component";
 
+import "hammerjs"; // Mandatory for angular-modal-gallery 3.x.x or greater (`npm i --save hammerjs`)
+import "mousetrap"; // Mandatory for angular-modal-gallery 3.x.x or greater (`npm i --save mousetrap`)
+import { GalleryModule } from "@ks89/angular-modal-gallery";
+import { StudentRoommatesComponent } from "./profile/student-roommates/student-roommates.component"; //
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,12 +44,14 @@ import { UserEditComponent } from "./students/user-edit/user-edit.component";
     AppToastsComponent,
     RoomEditComponent,
     UserEditComponent,
+    StudentRoommatesComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
     HttpClientModule,
     FormsModule,
     NgbModule,
+    GalleryModule.forRoot(),
     RouterModule.forRoot([
       {
         path: "",
@@ -55,6 +62,11 @@ import { UserEditComponent } from "./students/user-edit/user-edit.component";
       {
         path: "student-list",
         component: StudentListComponent,
+        canActivate: [RequireAuthenticatedUserRouteGuardService],
+      },
+      {
+        path: "roommates-list",
+        component: StudentRoommatesComponent,
         canActivate: [RequireAuthenticatedUserRouteGuardService],
       },
       {

@@ -38,6 +38,15 @@ namespace Dormitories.Core.DataAccess
                 .ForMember(x => x.DormitoryId, opt => opt.MapFrom(x => x.DormitoryId))
                 .ForMember(x => x.RoomId, opt => opt.MapFrom(x => x.RoomId))
                 .ForMember(x => x.RoleId, opt => opt.Ignore());
-        }   
+
+            CreateMap<ApplicationUser, RoommatesViewModel >()
+                .ForMember(x => x.PhoneNumber, opt => opt.MapFrom(x => x.PhoneNumber))
+                .ForMember(x => x.Name, opt => opt.MapFrom(x => x.Name))
+                .ForMember(x => x.Email, opt => opt.MapFrom(x => x.Email))
+                .ForMember(x => x.DormitoryName, opt => opt.MapFrom(x => x.Dormitory.Name))
+                .ForMember(x => x.DormitoryAddress, opt => opt.MapFrom(x => x.Dormitory.Address))
+                .ForMember(x => x.RoomName, opt => opt.MapFrom(x => x.Room.Name))
+                .ForMember(x => x.RoomFloor, opt => opt.MapFrom(x => x.Room.Floor));
+        }
     }
 }

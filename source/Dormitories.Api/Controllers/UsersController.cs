@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Dormitories.Api.Controllers
 {
-    [Authorize(Roles = "Staff")]
+    [Authorize(Roles = "Staff, Student")]
     [Route("users")]
     public class UsersController : ControllerBase
     {
@@ -27,6 +27,7 @@ namespace Dormitories.Api.Controllers
             _roleManager = roleManager;
         }
 
+        [Authorize(Roles = "Staff")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -34,6 +35,7 @@ namespace Dormitories.Api.Controllers
             return Ok(users);
         }
 
+        [Authorize(Roles = "Staff")]
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody]CreateUserViewModel user)
         {
@@ -49,11 +51,32 @@ namespace Dormitories.Api.Controllers
             return Ok(newUser);
         }
 
+        [Authorize(Roles = "Staff, Student")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id) => Ok(await _userManager.GetById(id));
 
+        [Authorize(Roles = "Staff, Student")]
+        [HttpGet("names/{id}")]
+        public async Task<IActionResult> GetByIdWithNames(int id) => Ok(await _userManager.GetByIdWithNames(id));
+
+        [Authorize(Roles = "Staff, Student")]
+        [HttpPatch]
+        public async Task<IActionResult> UpdatePayment([FromBody]PartialUpdateUserViewModel partialUpdateUser)
+        {   
+            return Ok(await _userManager.UpdatePayment(partialUpdateUser));
+        }
+
+        [Authorize(Roles = "Student")]
+        [HttpGet("roommates/{id}")]
+        public async Task<IActionResult> GetRoommates(int id)
+        {
+            return Ok(await _userManager.GetRoommates(id));
+        }
+
+        [Authorize(Roles = "Staff")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromQuery] int id, [FromBody]UpdateUserViewModel updatedUser) {
+        public async Task<IActionResult> Update([FromQuery] int id, [FromBody]UpdateUserViewModel updatedUser)
+        {
             var idWorkAround = int.TryParse(updatedUser.Id, out int idResult) ? idResult : throw new NotImplementedException();
             var user = await _userManager.GetEntityById(idWorkAround);
             var roles = user.UserRoles.Select(x => x.Role.Name).ToList();
@@ -65,6 +88,7 @@ namespace Dormitories.Api.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Staff")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

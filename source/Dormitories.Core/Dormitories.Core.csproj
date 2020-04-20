@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200420081133_expire at.cs" />
+    <Compile Remove="Migrations\20200420081133_expire at.Designer.cs" />
+    <Compile Remove="Migrations\20200420081244_expire at.cs" />
+    <Compile Remove="Migrations\20200420081244_expire at.Designer.cs" />
+    <Compile Remove="Migrations\20200420081349_expire at.cs" />
+    <Compile Remove="Migrations\20200420081349_expire at.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="IdentityServer4.EntityFramework" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />

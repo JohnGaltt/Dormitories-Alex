@@ -37,6 +37,8 @@ namespace Dormitories.Core.BusinessLogic.Managers
             await _dbContext.Rooms.AddAsync(room);
             await _dbContext.SaveChangesAsync();
 
+            roomDto.Id = room.Id;
+
             return roomDto;
         }
 

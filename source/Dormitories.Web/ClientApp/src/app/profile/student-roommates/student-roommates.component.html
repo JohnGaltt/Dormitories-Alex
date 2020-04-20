@@ -1,0 +1,51 @@
+<nav class="navbar navbar-light bg-light justify-content-between">
+  <form class="form-inline">
+    <input
+      class="form-control mr-sm-2"
+      type="search"
+      placeholder="Search"
+      aria-label="Search"
+      name="search"
+      [(ngModel)]="searchListFilter"
+    />
+  </form>
+</nav>
+
+<table
+  class="table table-striped"
+  aria-labelledby="tableLabel"
+  *ngIf="filteredRoommates"
+>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone Number</th>
+      <th>Dormitory Name</th>
+      <th>Dormitory Address</th>
+      <th>Room Name</th>
+      <th>Room Floor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="
+        let user of filteredRoommates
+          | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
+      "
+    >
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.phoneNumber }}</td>
+      <td>{{ user.dormitoryName }}</td>
+      <td>{{ user.dormitoryAddress }}</td>
+      <td>{{ user.roomName }}</td>
+      <td>{{ user.roomFloor }}</td>
+    </tr>
+  </tbody>
+  <ngb-pagination
+    [collectionSize]="filteredRoommates.length"
+    [(page)]="page"
+    [maxSize]="5"
+  ></ngb-pagination>
+</table>
